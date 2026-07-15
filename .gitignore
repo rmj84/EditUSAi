@@ -1,0 +1,5 @@
+# 절대 GitHub에 올리면 안 되는 것들
+.env
+node_modules/
+.DS_Store
+*.log
