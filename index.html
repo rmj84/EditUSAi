@@ -2,21 +2,30 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover"/>
-<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
 <meta name="theme-color" content="#f7f5f2"/>
 <title>EditUs — AI와 당신이 함께 편집하다</title>
 <meta name="description" content="트렌드 조사부터 대본, 편집, 썸네일까지. AI와 함께 만드는 올인원 크리에이터 툴, EditUs."/>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body,#root{height:100%;overflow:hidden;background:#f7f5f2;font-family:'Poppins',-apple-system,BlinkMacSystemFont,sans-serif}
-::-webkit-scrollbar{display:none}
+::-webkit-scrollbar{width:9px;height:9px}
+::-webkit-scrollbar-thumb{background:#d5cec2;border-radius:5px}
+::-webkit-scrollbar-thumb:hover{background:#b8ad9c}
+::-webkit-scrollbar-track{background:transparent}
 input[type=range]{-webkit-appearance:none;width:100%;height:4px;border-radius:2px;outline:none;cursor:pointer;background:#e3ddd4}
-input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:linear-gradient(135deg,#1a1a1a,#8b2fd6);cursor:pointer;box-shadow:0 2px 6px rgba(139,47,214,.4)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:15px;height:15px;border-radius:50%;background:linear-gradient(135deg,#1a1a1a,#8b2fd6);cursor:pointer;box-shadow:0 2px 6px rgba(139,47,214,.4)}
 @keyframes spin{to{transform:rotate(360deg)}}
 @keyframes b1{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
 .sp{animation:spin 1s linear infinite}
 .b1{animation:b1 1s infinite}.b2{animation:b1 1s .15s infinite}.b3{animation:b1 1s .3s infinite}
+.fadein{animation:fadeIn .15s ease}
+button{transition:transform .1s ease, opacity .1s ease, box-shadow .15s ease}
+button:hover:not(:disabled){opacity:.92}
+button:active:not(:disabled){transform:scale(.97)}
+button:disabled{cursor:not-allowed;opacity:.5}
+[data-hoverlift]:hover{transform:translateY(-1px)}
 </style>
 </head>
 <body>
@@ -27,7 +36,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;heigh
   var booted=false;window.__markBooted=function(){booted=true;};
   function showError(msg){var root=document.getElementById('root');if(!root)return;
     root.innerHTML='<div style="height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#f7f5f2;color:#1a1a1a;gap:14px;padding:28px;text-align:center;font-family:-apple-system,sans-serif"><div style="font-size:36px">⚠️</div><div style="font-size:16px;font-weight:700">앱을 불러오지 못했어요</div><div style="font-size:13px;color:#9a9186;max-width:280px;line-height:1.6">'+msg+'</div><button onclick="location.reload()" style="background:linear-gradient(135deg,#1a1a1a,#8b2fd6);color:#fff;border:none;border-radius:10px;padding:12px 26px;font-size:14px;font-weight:700;cursor:pointer">다시 시도</button></div>';}
-  window.__bootError=function(w){showError('필수 리소스('+w+')를 불러오지 못했어요.<br/>인터넷 연결을 확인하거나 Safari·Chrome에서 다시 열어주세요.');};
+  window.__bootError=function(w){showError('필수 리소스('+w+')를 불러오지 못했어요.<br/>인터넷 연결을 확인하거나 다시 열어주세요.');};
   window.addEventListener('error',function(){if(!booted)showError('스크립트 실행 중 오류가 발생했어요.<br/>새로고침 후에도 반복되면 다른 브라우저에서 열어주세요.');});
   setTimeout(function(){if(!booted)showError('로딩이 너무 오래 걸려요.<br/>네트워크 상태를 확인하고 다시 시도해주세요.');},9000);
 })();
@@ -66,6 +75,9 @@ const SFw=p=><I {...p} ch={<><polygon points="5 4 15 12 5 20 5 4"/><line x1="19"
 const Rotate=p=><I {...p} ch={<><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></>}/>;
 const TUp=p=><I {...p} ch={<><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></>}/>;
 const Copy=p=><I {...p} ch={<><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></>}/>;
+const ZIn=p=><I {...p} ch={<><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></>}/>;
+const ZOut=p=><I {...p} ch={<><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="8" y1="11" x2="14" y2="11"/></>}/>;
+const Keyboard=p=><I {...p} ch={<><rect x="2" y="6" width="20" height="12" rx="2"/><line x1="6" y1="10" x2="6" y2="10"/><line x1="10" y1="10" x2="10" y2="10"/><line x1="14" y1="10" x2="14" y2="10"/><line x1="18" y1="10" x2="18" y2="10"/><line x1="6" y1="14" x2="14" y2="14"/></>}/>;
 
 /* ── EditUs Logo Mark ── */
 const LogoMark=({sz=32})=>(
@@ -86,13 +98,15 @@ const K={
   b1:"#e5e0d8", b2:"#d5cec2",
   t1:"#1a1a1a", t2:"#5c564d", t3:"#9a9186", t4:"#c4bcae",
   grad:"linear-gradient(135deg,#161616,#8b2fd6)",
-  acc:"#8b2fd6", accSoft:"rgba(139,47,214,.12)",
+  gradTo:"#8b2fd6",
+  acc:"#8b2fd6", accSoft:"rgba(139,47,214,.10)",
   grn:"#1fa971", red:"#e14b4b", amb:"#d99a1f",
 };
 const MONO={fontFamily:"'SF Mono',Menlo,monospace",fontVariantNumeric:"tabular-nums"};
-const LBL={fontSize:9,fontWeight:700,letterSpacing:"0.1em",textTransform:"uppercase",color:K.t4,display:"block",marginBottom:8};
+const LBL={fontSize:10,fontWeight:700,letterSpacing:"0.09em",textTransform:"uppercase",color:K.t4,display:"block",marginBottom:9};
 const SHADOW="0 2px 10px rgba(26,20,10,.06)";
-const WAVE=Array.from({length:100},(_,i)=>0.08+0.52*Math.abs(Math.sin(i*0.241+1.12))+0.28*Math.abs(Math.sin(i*0.503+0.65)));
+const SHADOW_MD="0 8px 26px rgba(26,20,10,.10)";
+const WAVE=Array.from({length:160},(_,i)=>0.08+0.52*Math.abs(Math.sin(i*0.241+1.12))+0.28*Math.abs(Math.sin(i*0.503+0.65)));
 
 const GD0={lift:0,gamma:1,gain:1,saturation:1,contrast:1,temperature:0,tint:0,vignette:0};
 const toFilter=g=>{
@@ -122,59 +136,81 @@ const TD={
 const RATIOS=["16:9","9:16","1:1","4:3"];
 const RLABEL={"16:9":"YouTube","9:16":"TikTok","1:1":"Instagram","4:3":"Classic"};
 
-const AI_EDIT=`Expert AI video editor for "EditUs" — a warm, collaborative co-editing app where AI works together with the creator. Parse Korean editing commands. Respond ONLY with JSON (no markdown):
-{"message":"친근하고 협업적인 한국어 확인 메시지 20자이내 이모지1개","actions":[{"type":"colorGrade|applyTemplate|addText|cut|setSpeed|trim|reset","params":{}}]}`;
+const SCRIPT_STYLES=[{id:"tutorial",name:"튜토리얼",emoji:"📚"},{id:"vlog",name:"브이로그",emoji:"📱"},{id:"review",name:"리뷰",emoji:"⭐"},{id:"info",name:"정보/지식",emoji:"💡"},{id:"challenge",name:"챌린지",emoji:"🎯"},{id:"shorts",name:"쇼츠",emoji:"⚡"}];
+const SCRIPT_DURATIONS=[{id:"1",label:"1분"},{id:"3",label:"3분"},{id:"7",label:"7분"},{id:"15",label:"15분"},{id:"30",label:"30분"}];
+
+const THUMB_THEMES=[
+  {id:"mono",c1:"#161616",c2:"#3a2050",acc:"#8b2fd6",name:"EditUs"},
+  {id:"fire",c1:"#3a1808",c2:"#5c2a10",acc:"#e0742a",name:"파이어"},
+  {id:"ocean",c1:"#0a1f2d",c2:"#123448",acc:"#2fa8d9",name:"오션"},
+  {id:"forest",c1:"#0f2818",c2:"#1a4028",acc:"#1fa971",name:"포레스트"},
+  {id:"rose",c1:"#2a0a20",c2:"#4a1238",acc:"#d1478f",name:"로즈"},
+  {id:"gold",c1:"#2a1c08",c2:"#4a3210",acc:"#d99a1f",name:"골드"},
+];
+const THUMB_LAYOUTS=[{id:"bold",name:"빅 텍스트",ic:"Aa"},{id:"split",name:"반반 분할",ic:"↕"},{id:"neon",name:"네온",ic:"✦"},{id:"minimal",name:"미니멀",ic:"○"},{id:"cinematic",name:"시네마틱",ic:"🎬"},{id:"gaming",name:"게임",ic:"⚡"}];
+const THUMB_FORMATS=[{id:"youtube",name:"유튜브",w:1280,h:720},{id:"shorts",name:"쇼츠",w:1080,h:1920},{id:"banner",name:"채널아트",w:2560,h:1440}];
+
+const AI_EDIT=`Expert AI video editor for "EditUs". Respond ONLY with JSON (no markdown):
+{"message":"친근한 한국어 확인 20자이내 이모지1개","actions":[{"type":"colorGrade|applyTemplate|addText|cut|setSpeed|trim|reset","params":{}}]}`;
 const AI_SCRIPT=`Korean YouTube script writer. Respond ONLY with valid JSON (no markdown):
-{"title":"클릭하고싶은제목","hook":"첫15초훅멘트","intro":"인트로30-60초스크립트","sections":[{"label":"섹션명","content":"자연스러운스크립트","duration":"예상시간","tip":"촬영팁"}],"cta":"구독좋아요유도멘트","thumbnail_text":"썸네일텍스트15자이내","hashtags":["#태그1","#태그2","#태그3","#태그4","#태그5"],"estimated_duration":"영상예상길이"}`;
-const AI_TREND=`Korean YouTube trend analyst. Use web_search to find REAL current trending topics for Korean creators.
-Respond ONLY with JSON array (no markdown):
-[{"topic":"주제명","emoji":"이모지","score":85,"competition":"낮음|보통|높음","cpm":"낮음|보통|높음","reason":"지금뜨는이유1줄","ideas":["아이디어1","아이디어2","아이디어3"]}]
+{"title":"...","hook":"...","intro":"...","sections":[{"label":"...","content":"...","duration":"...","tip":"..."}],"cta":"...","thumbnail_text":"...","hashtags":[],"estimated_duration":"..."}`;
+const AI_TREND=`Korean YouTube trend analyst. Use web_search. Respond ONLY with JSON array (no markdown):
+[{"topic":"...","emoji":"...","score":85,"competition":"낮음|보통|높음","cpm":"낮음|보통|높음","reason":"...","ideas":[]}]
 Return exactly 6 items.`;
-const AI_THUMB=`Suggest YouTube thumbnail text. Respond ONLY with JSON (no markdown):
-{"main":"메인텍스트15자이내","sub":"서브텍스트또는채널명","badge":"HOT|NEW|충격|실화|필수|최초|단독"}`;
+const AI_THUMB=`Suggest YouTube thumbnail text. Respond ONLY with JSON: {"main":"...","sub":"...","badge":"HOT|NEW|충격|실화|필수|최초|단독"}`;
 
 const bx=(bg,fg="#fff",ex={})=>({backgroundColor:bg,color:fg,border:"none",cursor:"pointer",fontFamily:"inherit",...ex});
 const fmtT=s=>{const n=Math.max(0,Math.floor(s||0));return`${Math.floor(n/60)}:${String(n%60).padStart(2,"0")}`;};
 
-/* ══════════════════════ MAIN APP ══════════════════════
-   NOTE: API calls below hit Anthropic directly with a client-provided key
-   for this static/demo build. Before the paid PC beta launch, swap these
-   fetch() calls to hit YOUR backend (/backend/server.js in this repo)
-   instead — that's what actually protects the key + applies quotas. */
+/* ══════════════════════ MAIN APP ══════════════════════ */
 function App(){
-  const [apiKey, setApiKey] = useState("");
-  const [showKey, setShowKey] = useState(false);
-  const [screen, setScreen] = useState("home");
-  const [homeTab, setHomeTab] = useState("editor");
+  const [isDesktop,setIsDesktop]=useState(()=>typeof window!=="undefined"?window.innerWidth>=980:true);
+  useEffect(()=>{const fn=()=>setIsDesktop(window.innerWidth>=980);window.addEventListener("resize",fn);return()=>window.removeEventListener("resize",fn);},[]);
 
-  const [vUrl, setVUrl] = useState(null), [vName, setVName] = useState("새 프로젝트");
-  const [dur, setDur] = useState(0), [ct, setCt] = useState(0);
-  const [play, setPlay] = useState(false), [spd, setSpd] = useState(1);
-  const [ratio, setRatio] = useState("16:9");
+  const [apiKey,setApiKey]=useState(""), [showKey,setShowKey]=useState(false);
+  const [showShortcuts,setShowShortcuts]=useState(false);
+  const [screen,setScreen]=useState("home"), [homeTab,setHomeTab]=useState("editor");
 
-  const [grade, setGrade] = useState({...GD0});
-  const [overlays, setOverlays] = useState([]);
-  const [cuts, setCuts] = useState([]);
-  const [trimIn, setTrimIn] = useState(0), [trimOut, setTrimOut] = useState(0);
-  const [tplId, setTplId] = useState(null);
-  const [edHist, setEdHist] = useState([]);
-  const [tracks, setTracks] = useState([
-    {id:"video",label:"V1",c:K.gradTo||K.acc,items:[]},{id:"text",label:"TXT",c:K.grn,items:[]},
+  const [vUrl,setVUrl]=useState(null), [vName,setVName]=useState("새 프로젝트");
+  const [dur,setDur]=useState(0), [ct,setCt]=useState(0);
+  const [play,setPlay]=useState(false), [spd,setSpd]=useState(1);
+  const [ratio,setRatio]=useState("16:9");
+
+  const [grade,setGrade]=useState({...GD0});
+  const [overlays,setOverlays]=useState([]);
+  const [cuts,setCuts]=useState([]);
+  const [trimIn,setTrimIn]=useState(0), [trimOut,setTrimOut]=useState(0);
+  const [tplId,setTplId]=useState(null);
+  const [edHist,setEdHist]=useState([]);
+  const [snapshots,setSnapshots]=useState([]);
+  const [tracks,setTracks]=useState([
+    {id:"video",label:"V1",c:K.gradTo,items:[]},{id:"text",label:"TXT",c:K.grn,items:[]},
     {id:"audio",label:"A1",c:K.amb,items:[]},{id:"fx",label:"FX",c:K.red,items:[]},
   ]);
+  const [tlZoom,setTlZoom]=useState(1);
+  const [colorMode,setColorMode]=useState("simple");
 
-  const [tool, setTool] = useState("ai");
-  const [showBefore, setShowBefore] = useState(false);
-  const [exporting, setExporting] = useState(false), [expPct, setExpPct] = useState(0);
+  const [tool,setTool]=useState("ai");
+  const [showBefore,setShowBefore]=useState(false);
+  const [exporting,setExporting]=useState(false), [expPct,setExpPct]=useState(0);
 
-  const [msgs, setMsgs] = useState([{role:"ai",content:"안녕하세요! 저는 당신과 함께 영상을 만드는 EditUs AI예요 🤝\n\n예시\n• \"영화처럼 만들어줘\"\n• \"따뜻하게 색감 바꿔줘\"\n• \"인트로 3초 잘라줘\""}]);
-  const [chatIn, setChatIn] = useState(""), [aiWork, setAiWork] = useState(false);
+  const [msgs,setMsgs]=useState([{role:"ai",content:"안녕하세요! 저는 당신과 함께 영상을 만드는 EditUs AI예요 🤝\n\n예시\n• \"영화처럼 만들어줘\"\n• \"따뜻하게 색감 바꿔줘\"\n• \"인트로 3초 잘라줘\""}]);
+  const [chatIn,setChatIn]=useState(""), [aiWork,setAiWork]=useState(false);
 
-  const [txtIn, setTxtIn] = useState(""), [txtPos, setTxtPos] = useState("bottom");
-  const [txtSty, setTxtSty] = useState("subtitle"), [txtClr, setTxtClr] = useState("#ffffff");
+  const [txtIn,setTxtIn]=useState(""), [txtPos,setTxtPos]=useState("bottom");
+  const [txtSty,setTxtSty]=useState("subtitle"), [txtClr,setTxtClr]=useState("#ffffff");
 
-  const [cIn, setCIn] = useState(0), [cOut, setCOut] = useState(5);
-  const [cat, setCat] = useState("game"), [ckd, setCkd] = useState({});
+  const [cIn,setCIn]=useState(0), [cOut,setCOut]=useState(5);
+  const [cat,setCat]=useState("game"), [ckd,setCkd]=useState({});
+
+  const [scriptTopic,setScriptTopic]=useState(""), [scriptStyle,setScriptStyle]=useState("tutorial"), [scriptDuration,setScriptDuration]=useState("7");
+  const [scriptResult,setScriptResult]=useState(null), [scriptLoading,setScriptLoading]=useState(false), [scriptOpenIdx,setScriptOpenIdx]=useState(0);
+
+  const [thumbFormat,setThumbFormat]=useState("youtube"), [thumbLayout,setThumbLayout]=useState("bold"), [thumbTheme,setThumbTheme]=useState("mono");
+  const [thumbText1,setThumbText1]=useState("제목을 입력하세요"), [thumbText2,setThumbText2]=useState("채널명"), [thumbBadge,setThumbBadge]=useState("HOT");
+  const thumbRef=useRef(null);
+
+  const [trendResults,setTrendResults]=useState([]), [trendLoading,setTrendLoading]=useState(false), [trendQuery,setTrendQuery]=useState("");
 
   const vRef=useRef(null), cRef=useRef(null), fRef=useRef(null), animR=useRef(null), msgEnd=useRef(null);
   const gR=useRef(grade), oR=useRef(overlays), cuR=useRef(cuts), bfR=useRef(false), uR=useRef(null);
@@ -185,6 +221,23 @@ function App(){
   useEffect(()=>{bfR.current=showBefore},[showBefore]);
   useEffect(()=>{uR.current=vUrl},[vUrl]);
   useEffect(()=>{msgEnd.current?.scrollIntoView({behavior:"smooth"})},[msgs]);
+
+  /* ── ⌨️ Keyboard shortcuts (PC-only convenience layer) ── */
+  useEffect(()=>{
+    const fn=e=>{
+      if(e.target.tagName==="INPUT"||e.target.tagName==="TEXTAREA")return;
+      if((e.metaKey||e.ctrlKey)&&e.key==="z"){e.preventDefault();undoEdit();return;}
+      if(screen!=="editor"||!vUrl)return;
+      if(e.code==="Space"){e.preventDefault();togglePlay();}
+      else if(e.key==="ArrowLeft"){e.preventDefault();seek(ct-5);}
+      else if(e.key==="ArrowRight"){e.preventDefault();seek(ct+5);}
+      else if(e.key==="i"||e.key==="I"){setTrimIn(ct);}
+      else if(e.key==="o"||e.key==="O"){setTrimOut(ct);}
+      else if(e.key==="?"){setShowShortcuts(s=>!s);}
+    };
+    window.addEventListener("keydown",fn);
+    return()=>window.removeEventListener("keydown",fn);
+  });
 
   useEffect(()=>{
     const draw=()=>{
@@ -197,8 +250,11 @@ function App(){
             ctx.filter="none";ctx.drawImage(v,0,0,w,h);
             ctx.save();ctx.beginPath();ctx.rect(w/2,0,w/2,h);ctx.clip();
             ctx.filter=f;ctx.drawImage(v,0,0,w,h);
+            if(vig>0){ctx.filter="none";const g2=ctx.createRadialGradient(w/2,h/2,h*.3,w/2,h/2,h*.85);g2.addColorStop(0,"rgba(0,0,0,0)");g2.addColorStop(1,`rgba(0,0,0,${vig*.8})`);ctx.fillStyle=g2;ctx.fillRect(w/2,0,w/2,h);}
             ctx.restore();
             ctx.fillStyle="rgba(255,255,255,.4)";ctx.fillRect(w/2-1,0,2,h);
+            ctx.font="700 12px system-ui";ctx.textAlign="left";ctx.fillStyle="rgba(0,0,0,.6)";ctx.fillRect(8,h-30,38,22);ctx.fillStyle="#fff";ctx.fillText("원본",13,h-14);
+            ctx.textAlign="right";ctx.fillStyle="rgba(0,0,0,.6)";ctx.fillRect(w-46,h-30,38,22);ctx.fillStyle="#fff";ctx.fillText("보정",w-8,h-14);
           }else{
             ctx.save();ctx.filter=f;ctx.drawImage(v,0,0,w,h);ctx.restore();
             if(vig>0){const gv=ctx.createRadialGradient(w/2,h/2,h*.3,w/2,h/2,h*.85);gv.addColorStop(0,"rgba(0,0,0,0)");gv.addColorStop(1,`rgba(0,0,0,${vig*.8})`);ctx.fillStyle=gv;ctx.fillRect(0,0,w,h);}
@@ -208,7 +264,8 @@ function App(){
               const fs=ov.size||30,x=w/2,y=ov.pos==="top"?h*.1:ov.pos==="middle"?h*.5:h*.88;
               ctx.save();
               if(ov.style==="subtitle"){ctx.font=`700 ${fs}px system-ui`;const mw=ctx.measureText(ov.text).width;ctx.fillStyle="rgba(0,0,0,.78)";ctx.beginPath();(ctx.roundRect||ctx.rect).call(ctx,x-mw/2-10,y-fs/2-6,mw+20,fs+12,4);ctx.fill();}
-              ctx.font=`700 ${fs}px system-ui`;ctx.textAlign="center";ctx.textBaseline="middle";
+              else if(ov.style==="neon"){ctx.shadowColor=ov.color;ctx.shadowBlur=20;}
+              ctx.font=`${ov.style==="bold"?"900":"700"} ${fs}px system-ui`;ctx.textAlign="center";ctx.textBaseline="middle";
               ctx.strokeStyle="rgba(0,0,0,.88)";ctx.lineWidth=fs*.1;ctx.lineJoin="round";ctx.strokeText(ov.text,x,y);
               ctx.fillStyle=ov.color||"#fff";ctx.fillText(ov.text,x,y);ctx.restore();
             });
@@ -221,37 +278,49 @@ function App(){
     return()=>cancelAnimationFrame(animR.current);
   },[]);
 
-  const addH=m=>setEdHist(p=>[{id:Date.now(),m},...p.slice(0,29)]);
-  const loadVid=(url,name)=>{if(vUrl)URL.revokeObjectURL(vUrl);setVUrl(url);setVName(name);setGrade({...GD0});setOverlays([]);setCuts([]);setTplId(null);setSpd(1);setPlay(false);setScreen("editor");};
+  const addH=m=>setEdHist(p=>[{id:Date.now(),m,t:new Date().toLocaleTimeString("ko-KR",{hour:"2-digit",minute:"2-digit"})},...p.slice(0,29)]);
+  const pushSnap=()=>setSnapshots(p=>[...p.slice(-19),{grade:{...grade},overlays:[...overlays],cuts:[...cuts],trimIn,trimOut,tplId}]);
+  const undoEdit=()=>setSnapshots(p=>{
+    if(!p.length)return p;
+    const s=p[p.length-1];
+    setGrade(s.grade);setOverlays(s.overlays);setCuts(s.cuts);setTrimIn(s.trimIn);setTrimOut(s.trimOut);setTplId(s.tplId);
+    addH("↩️ 실행 취소");return p.slice(0,-1);
+  });
+
+  const loadVid=(url,name)=>{if(vUrl)URL.revokeObjectURL(vUrl);setVUrl(url);setVName(name);setGrade({...GD0});setOverlays([]);setCuts([]);setTplId(null);setSpd(1);setPlay(false);setEdHist([]);setSnapshots([]);setScreen("editor");};
   const onFile=e=>{const f=e.target.files?.[0];if(!f)return;loadVid(URL.createObjectURL(f),f.name.replace(/\.[^.]+$/,""));};
   const onLoaded=()=>{const v=vRef.current,c=cRef.current;if(!v||!c)return;c.width=v.videoWidth||1280;c.height=v.videoHeight||720;const d=v.duration;setDur(d);setTrimIn(0);setTrimOut(d);setCIn(0);setCOut(Math.min(5,d));v.playbackRate=spd;};
   const onTU=()=>{const v=vRef.current;if(!v)return;const c=v.currentTime;setCt(c);if(c>=trimOut){v.pause();v.currentTime=trimIn;setPlay(false);return;}for(const cut of cuR.current){if(c>=cut.s&&c<cut.e){v.currentTime=cut.e;break;}}};
   const togglePlay=()=>{const v=vRef.current;if(!v||!vUrl)return;if(play)v.pause();else{if(v.currentTime>=trimOut)v.currentTime=trimIn;v.play();}};
   const seek=t=>{if(vRef.current)vRef.current.currentTime=Math.max(trimIn,Math.min(trimOut||dur,t));};
-  const applyTpl=tp=>{setGrade({...GD0,...tp.g});setTplId(tp.id);addH(`✨ ${tp.n}`);};
-  const addCut=(s,e)=>{if(e<=s)return;setCuts(p=>[...p,{id:Date.now(),s,e}]);addH(`✂️ ${fmtT(s)}–${fmtT(e)}`);};
-  const addTxt=(text,pos=txtPos,sty=txtSty,clr=txtClr,sa=ct,d=5)=>{setOverlays(p=>[...p,{id:Date.now(),text,pos,style:sty,color:clr,size:30,s:sa,dur:d}]);addH(`💬 "${text}"`);};
+  const applyTpl=tp=>{pushSnap();setGrade({...GD0,...tp.g});setTplId(tp.id);addH(`✨ ${tp.n}`);};
+  const addCut=(s,e)=>{if(e<=s)return;pushSnap();const cut={id:Date.now(),s,e};setCuts(p=>[...p,cut]);setTracks(p=>p.map(t=>t.id==="fx"?{...t,items:[...t.items,{id:cut.id,s,e,label:"CUT"}]}:t));addH(`✂️ ${fmtT(s)}–${fmtT(e)}`);};
+  const addTxt=(text,pos=txtPos,sty=txtSty,clr=txtClr,sa=ct,d=5)=>{pushSnap();const ov={id:Date.now(),text,pos,style:sty,color:clr,size:30,s:sa,dur:d};setOverlays(p=>[...p,ov]);setTracks(p=>p.map(t=>t.id==="text"?{...t,items:[...t.items,{id:ov.id,s:sa,e:sa+d,label:text}]}:t));addH(`💬 "${text}"`);};
 
   const sendCmd=async()=>{
     if(!chatIn.trim()||aiWork)return;
     const msg=chatIn.trim();setChatIn("");setMsgs(p=>[...p,{role:"user",content:msg}]);setAiWork(true);
     if(!apiKey.trim()){
-      setMsgs(p=>[...p,{role:"ai",content:"⚙️ 저와 자유롭게 대화하며 편집하려면 우상단 🔑 설정에서 API 키를 입력해주세요."}]);
+      const demos={"영화":()=>{applyTpl(TPLS[0]);return"🎬 시네마틱 스타일로 함께 바꿔봤어요!";},"따뜻":()=>{setGrade(p=>({...p,temperature:0.4}));addH("🌡️ 따뜻한 톤");return"☀️ 색온도를 따뜻하게 조정했어요!";},"슬로":()=>{setSpd(0.5);if(vRef.current)vRef.current.playbackRate=0.5;addH("⚡ 0.5x");return"⏱️ 슬로모션으로 설정했어요!";},"2배":()=>{setSpd(2);if(vRef.current)vRef.current.playbackRate=2;addH("⚡ 2x");return"⚡ 2배속으로 설정했어요!";},"초기화":()=>{setGrade({...GD0});setOverlays([]);setCuts([]);setSpd(1);setTplId(null);addH("🔄 초기화");return"🔄 처음부터 다시 함께 시작해봐요!";}};
+      let replied=false;
+      for(const[k,fn]of Object.entries(demos)){if(msg.includes(k)){setMsgs(p=>[...p,{role:"ai",content:fn()}]);replied=true;break;}}
+      if(!replied)setMsgs(p=>[...p,{role:"ai",content:"⚙️ 저와 자유롭게 대화하며 편집하려면 우상단 🔑 설정에서 API 키를 입력해주세요."}]);
       setAiWork(false);return;
     }
     try{
       const res=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json","x-api-key":apiKey.trim(),"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},body:JSON.stringify({model:"claude-sonnet-4-6",max_tokens:500,system:AI_EDIT,messages:[{role:"user",content:`dur=${fmtT(dur)},ct=${fmtT(ct)},spd=${spd}x\n${msg}`}]})});
       const data=await res.json();
+      if(data.error)throw new Error(data.error.message);
       const j=JSON.parse(data.content.map(b=>b.text||"").join("").replace(/```json|```/g,"").trim());
-      setMsgs(p=>[...p,{role:"ai",content:j.message}]);
+      setMsgs(p=>[...p,{role:"ai",content:j.message}]);pushSnap();
       for(const a of(j.actions||[])){
         const p=a.params||{};
-        if(a.type==="colorGrade")setGrade(prev=>({...prev,...p}));
-        else if(a.type==="applyTemplate"){const tp=TPLS.find(t=>t.id===p.id);if(tp)applyTpl(tp);}
-        else if(a.type==="addText")addTxt(p.text||msg,p.pos,p.style,p.color,ct,p.duration||5);
+        if(a.type==="colorGrade"){setGrade(prev=>({...prev,...p}));addH("🎨 AI 색보정");}
+        else if(a.type==="applyTemplate"){const tp=TPLS.find(t=>t.id===p.id);if(tp){setGrade({...GD0,...tp.g});setTplId(tp.id);addH(`✨ ${tp.n}`);}}
+        else if(a.type==="addText")addTxt(p.text||msg,p.pos||"bottom",p.style||"subtitle",p.color||"#fff",ct,p.duration||5);
         else if(a.type==="cut")addCut(p.start??0,p.end??Math.min((p.start??0)+5,dur));
-        else if(a.type==="setSpeed"){setSpd(p.speed||1);if(vRef.current)vRef.current.playbackRate=p.speed||1;}
-        else if(a.type==="reset"){setGrade({...GD0});setOverlays([]);setCuts([]);setSpd(1);setTplId(null);}
+        else if(a.type==="setSpeed"){setSpd(p.speed||1);if(vRef.current)vRef.current.playbackRate=p.speed||1;addH(`⚡ ${p.speed}x`);}
+        else if(a.type==="reset"){setGrade({...GD0});setOverlays([]);setCuts([]);setSpd(1);setTplId(null);addH("🔄 초기화");}
       }
     }catch(e){setMsgs(p=>[...p,{role:"ai",content:"⚠️ 오류: "+e.message}]);}
     setAiWork(false);
@@ -263,103 +332,366 @@ function App(){
     try{
       const s=c.captureStream(30),r=new MediaRecorder(s,{mimeType:"video/webm;codecs=vp9"}),chunks=[];
       r.ondataavailable=e=>{if(e.data.size>0)chunks.push(e.data);};
-      r.onstop=()=>{const blob=new Blob(chunks,{type:"video/webm"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=`${vName}_edited.webm`;document.body.appendChild(a);a.click();document.body.removeChild(a);setTimeout(()=>URL.revokeObjectURL(url),1000);setExporting(false);setExpPct(0);};
+      r.onstop=()=>{const blob=new Blob(chunks,{type:"video/webm"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=`${vName}_edited.webm`;document.body.appendChild(a);a.click();document.body.removeChild(a);setTimeout(()=>URL.revokeObjectURL(url),1000);setExporting(false);setExpPct(0);addH("💾 완료");};
       v.currentTime=trimIn;await new Promise(r=>setTimeout(r,120));r.start(100);v.play();setPlay(true);
       const tot=trimOut-trimIn,iv=setInterval(()=>{setExpPct(Math.min((v.currentTime-trimIn)/tot*100,99));if(v.currentTime>=trimOut||v.paused){clearInterval(iv);v.pause();setPlay(false);r.stop();}},200);
     }catch{setExporting(false);}
   };
 
+  const generateScript=async()=>{
+    if(!scriptTopic.trim()||scriptLoading)return;setScriptLoading(true);setScriptResult(null);
+    if(!apiKey.trim()){setScriptResult({title:"⚙️ API 키가 필요해요",hook:"우상단 🔑 설정에서 Claude API 키를 입력해주세요.",intro:"",sections:[],cta:"",hashtags:[],estimated_duration:""});setScriptLoading(false);return;}
+    try{
+      const style=SCRIPT_STYLES.find(s=>s.id===scriptStyle);
+      const res=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json","x-api-key":apiKey.trim(),"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},body:JSON.stringify({model:"claude-sonnet-4-6",max_tokens:2000,system:AI_SCRIPT,messages:[{role:"user",content:`주제: ${scriptTopic}\n스타일: ${style?.name}\n길이: ${scriptDuration}분`}]})});
+      const data=await res.json();
+      if(data.error)throw new Error(data.error.message);
+      const j=JSON.parse(data.content.map(b=>b.text||"").join("").replace(/```json|```/g,"").trim());
+      setScriptResult(j);setScriptOpenIdx(0);
+      if(j.thumbnail_text)setThumbText1(j.thumbnail_text);
+    }catch(e){setScriptResult({title:"생성 오류",hook:"오류: "+e.message,intro:"",sections:[],cta:"",hashtags:[],estimated_duration:""});}
+    setScriptLoading(false);
+  };
+  const scriptToEditor=()=>{
+    if(!scriptResult||!vUrl)return;pushSnap();
+    const sections=[{c:scriptResult.hook,dur:15},{c:scriptResult.intro,dur:45},...(scriptResult.sections||[]).map(s=>({c:s.content.slice(0,60),dur:120})),{c:scriptResult.cta,dur:30}];
+    const sp=dur/sections.length;
+    const newOvs=sections.map((s,i)=>({id:Date.now()+i,text:(s.c||"").slice(0,40),pos:"bottom",style:"subtitle",color:"#fff",size:28,s:i*sp,dur:Math.min(s.dur/10,sp*.9)}));
+    setOverlays(p=>[...p,...newOvs]);addH(`📝 대본 자막 ${newOvs.length}개 삽입`);setScreen("editor");
+  };
+
+  const generateTrends=async()=>{
+    if(trendLoading)return;setTrendLoading(true);setTrendResults([]);
+    const fallback=()=>setTrendResults([
+      {topic:"AI 도구 활용 생산성 루틴",emoji:"🤖",score:96,competition:"낮음",cpm:"높음",reason:"ChatGPT·Claude 일상 활용 수요 폭발",ideas:["AI로 하루 계획 짜기","AI 글쓰기 자동화"]},
+      {topic:"1인 미니멀 라이프",emoji:"🏠",score:89,competition:"보통",cpm:"보통",reason:"절약·단순 라이프스타일 관심 급증",ideas:["미니멀 쇼핑 도전","방 비우기 챌린지"]},
+      {topic:"헬스·다이어트 쇼츠",emoji:"💪",score:85,competition:"높음",cpm:"보통",reason:"짧고 강렬한 운동 콘텐츠 알고리즘 픽업",ideas:["5분 아침 운동","30일 복근 챌린지"]},
+      {topic:"K-콘텐츠 비하인드",emoji:"🎬",score:83,competition:"낮음",cpm:"높음",reason:"K-드라마·K-팝 글로벌 인기 정점",ideas:["촬영지 탐방","OST 숨겨진 스토리"]},
+      {topic:"재테크 입문",emoji:"💰",score:80,competition:"높음",cpm:"매우높음",reason:"고금리 시대 투자 대안 탐색 증가",ideas:["주식 초보 가이드","ETF vs 적금 비교"]},
+      {topic:"해외 여행 리얼 후기",emoji:"✈️",score:77,competition:"보통",cpm:"높음",reason:"저가항공 확대로 접근성 향상",ideas:["동남아 2주 총비용 공개","일본 소도시 명소"]},
+    ]);
+    if(!apiKey.trim()){fallback();setTrendLoading(false);return;}
+    try{
+      const res=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json","x-api-key":apiKey.trim(),"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},body:JSON.stringify({model:"claude-sonnet-4-6",max_tokens:2000,system:AI_TREND,tools:[{type:"web_search_20250305",name:"web_search"}],messages:[{role:"user",content:`현재 한국 유튜브 ${trendQuery||CATS.find(c=>c.id===cat)?.l||cat} 분야 트렌딩 주제 6개를 실시간 검색으로 찾아줘.`}]})});
+      const data=await res.json();
+      const text=data.content.filter(b=>b.type==="text").map(b=>b.text).join("");
+      const match=text.replace(/```json|```/g,"").match(/\[[\s\S]*\]/);
+      if(match)setTrendResults(JSON.parse(match[0]));else fallback();
+    }catch{fallback();}
+    setTrendLoading(false);
+  };
+
+  const renderThumb=useCallback(()=>{
+    const c=thumbRef.current;if(!c)return;
+    const ctx=c.getContext("2d");
+    const fmt=THUMB_FORMATS.find(f=>f.id===thumbFormat)||THUMB_FORMATS[0];
+    const W=fmt.w,H=fmt.h;c.width=W;c.height=H;
+    const th=THUMB_THEMES.find(t=>t.id===thumbTheme)||THUMB_THEMES[0];
+    const{c1,c2,acc}=th;const FS=Math.min(W,H)/7;
+    const bg=ctx.createLinearGradient(0,0,W,H);bg.addColorStop(0,c1);bg.addColorStop(1,c2);ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+    ctx.save();ctx.font=`900 ${FS*1.3}px Poppins,system-ui`;ctx.textAlign="center";ctx.textBaseline="middle";ctx.shadowColor=acc;ctx.shadowBlur=40;ctx.fillStyle="#fff";
+    const words=thumbText1.split(" ");let lines=[],ln="";
+    for(const w of words){if(ctx.measureText(ln+" "+w).width>W*.85&&ln){lines.push(ln.trim());ln=w;}else ln+=(ln?" ":"")+w;}lines.push(ln.trim());
+    const lh=FS*1.5,sy=H/2-(lines.length-1)*lh/2;lines.forEach((l,i)=>ctx.fillText(l,W/2,sy+i*lh));ctx.shadowBlur=0;ctx.restore();
+    if(thumbText2){ctx.font=`600 ${FS*.6}px Poppins,system-ui`;ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillStyle="rgba(255,255,255,.7)";ctx.fillText(thumbText2,W/2,H*.83);}
+    if(thumbBadge){ctx.font=`800 ${FS*.55}px Poppins,system-ui`;ctx.textAlign="left";ctx.textBaseline="middle";const bw=ctx.measureText(thumbBadge).width+W*.04,bh=FS*.85,bxp=W*.03,by=H*.04;ctx.fillStyle=acc;ctx.beginPath();(ctx.roundRect||ctx.rect).call(ctx,bxp,by,bw,bh,bh/2);ctx.fill();ctx.fillStyle="#fff";ctx.fillText(thumbBadge,bxp+W*.02,by+bh/2);}
+  },[thumbTheme,thumbText1,thumbText2,thumbBadge,thumbFormat]);
+  useEffect(()=>{if(homeTab==="design")renderThumb();},[renderThumb,homeTab]);
+  const downloadThumb=()=>{const c=thumbRef.current;if(!c)return;const a=document.createElement("a");a.download=`thumb_${thumbFormat}.png`;a.href=c.toDataURL("image/png");a.click();};
+
   const td=TD[cat]||TD.game,catI=CATS.find(c=>c.id===cat)||CATS[0];
   const doneN=td.ck.filter((_,i)=>ckd[`${cat}-${i}`]).length;
+  const hasGrd=grade.lift!==0||grade.saturation!==1||grade.contrast!==1||grade.temperature!==0||grade.gain!==1||(grade.vignette||0)>0;
+  const tplName=TPLS.find(t=>t.id===tplId);
   const QUICK=["영화처럼 만들어줘","따뜻하게 바꿔줘","슬로모션으로","자막 넣어줘","초기화해줘"];
+  const EDITOR_TOOLS=[["ai",Sparkles,"AI 편집"],["cut",Scissors,"컷&속도"],["color",Sliders,"색보정"],["text",TypeI,"자막"],["style",Palette,"스타일"]];
+
+  const gSlider=(label,key,min,max,col)=>(
+    <div key={key} style={{marginBottom:12}}>
+      <div style={{display:"flex",justifyContent:"space-between",marginBottom:4}}><span style={{fontSize:11,color:col||K.t2,fontWeight:600}}>{label}</span><span style={{fontSize:11,color:col||K.t1,fontWeight:700,...MONO}}>{grade[key].toFixed(2)}</span></div>
+      <input type="range" min={min} max={max} step={0.01} value={grade[key]} onMouseDown={pushSnap} onChange={e=>setGrade(p=>({...p,[key]:Number(e.target.value)}))} style={{accentColor:col||K.acc}}/>
+    </div>
+  );
 
   const KeyModal=showKey?(
     <div style={{position:"fixed",inset:0,backgroundColor:"rgba(20,15,10,.5)",zIndex:9999,display:"flex",alignItems:"center",justifyContent:"center",padding:20}}>
-      <div style={{backgroundColor:K.s1,borderRadius:20,padding:22,width:"100%",maxWidth:360}}>
-        <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:8}}><LogoMark sz={22}/><p style={{fontSize:16,fontWeight:800,margin:0}}>API 키로 함께하기</p></div>
-        <p style={{fontSize:12,color:K.t2,margin:"0 0 14px"}}>console.anthropic.com에서 발급한 키를 입력하세요.</p>
-        <input type="password" value={apiKey} onChange={e=>setApiKey(e.target.value)} placeholder="sk-ant-..." style={{width:"100%",backgroundColor:K.s3,border:`1px solid ${K.b1}`,borderRadius:11,padding:"11px 13px",fontSize:13,marginBottom:10}}/>
-        <button onClick={()=>setShowKey(false)} style={bx(K.grad,"#fff",{width:"100%",padding:"11px",fontSize:13,fontWeight:700,borderRadius:11})}>저장</button>
+      <div style={{backgroundColor:K.s1,borderRadius:20,padding:24,width:"100%",maxWidth:380,boxShadow:SHADOW_MD}}>
+        <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:8}}><LogoMark sz={24}/><p style={{fontSize:17,fontWeight:800,margin:0}}>API 키로 함께하기</p></div>
+        <p style={{fontSize:13,color:K.t2,margin:"0 0 14px",lineHeight:1.6}}>console.anthropic.com에서 발급한 키를 입력하세요.</p>
+        <input type="password" value={apiKey} onChange={e=>setApiKey(e.target.value)} placeholder="sk-ant-..." style={{width:"100%",backgroundColor:K.s3,border:`1px solid ${K.b1}`,borderRadius:11,padding:"12px 14px",fontSize:14,marginBottom:12}}/>
+        <div style={{display:"flex",gap:8}}><button onClick={()=>setShowKey(false)} style={bx(K.s3,K.t2,{flex:1,padding:"12px",fontSize:14,fontWeight:600,borderRadius:11})}>닫기</button><button onClick={()=>setShowKey(false)} style={bx(K.grad,"#fff",{flex:1,padding:"12px",fontSize:14,fontWeight:700,borderRadius:11})}>저장</button></div>
       </div>
     </div>
   ):null;
 
-  if(screen==="editor")return(
-    <div style={{maxWidth:430,margin:"0 auto",height:"100vh",display:"flex",flexDirection:"column",backgroundColor:K.bg,color:K.t1,overflow:"hidden"}}>
-      {KeyModal}
+  const ShortcutsModal=showShortcuts?(
+    <div style={{position:"fixed",inset:0,backgroundColor:"rgba(20,15,10,.5)",zIndex:9999,display:"flex",alignItems:"center",justifyContent:"center",padding:20}} onClick={()=>setShowShortcuts(false)}>
+      <div onClick={e=>e.stopPropagation()} style={{backgroundColor:K.s1,borderRadius:20,padding:26,width:"100%",maxWidth:400,boxShadow:SHADOW_MD}}>
+        <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:16}}><Keyboard sz={20} color={K.acc}/><p style={{fontSize:17,fontWeight:800,margin:0}}>키보드 단축키</p></div>
+        {[["Space","재생 / 일시정지"],["← →","5초 뒤로 / 앞으로"],["I / O","현재 위치를 IN / OUT 포인트로"],["⌘/Ctrl + Z","실행 취소"],["?","이 창 열기/닫기"]].map(([k,d],i)=>(
+          <div key={i} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"9px 0",borderBottom:i<4?`1px solid ${K.b1}`:"none"}}>
+            <span style={{fontSize:13,color:K.t2}}>{d}</span>
+            <span style={{fontSize:12,fontWeight:700,backgroundColor:K.s3,padding:"4px 10px",borderRadius:7,...MONO}}>{k}</span>
+          </div>
+        ))}
+        <button onClick={()=>setShowShortcuts(false)} style={bx(K.grad,"#fff",{width:"100%",padding:"11px",fontSize:13,fontWeight:700,borderRadius:11,marginTop:16})}>확인</button>
+      </div>
+    </div>
+  ):null;
+
+  /* ═══════════════ DESKTOP EDITOR — 3-panel NLE layout ═══════════════ */
+  const DesktopEditor=()=>(
+    <div style={{display:"flex",height:"100vh",overflow:"hidden",backgroundColor:K.bg,color:K.t1}}>
+      {KeyModal}{ShortcutsModal}
       {vUrl&&<video ref={vRef} src={vUrl} crossOrigin="anonymous" preload="auto" onLoadedMetadata={onLoaded} onTimeUpdate={onTU} onPlay={()=>setPlay(true)} onPause={()=>setPlay(false)} style={{display:"none"}}/>}
       <input ref={fRef} type="file" accept="video/*" onChange={onFile} style={{display:"none"}}/>
-      <div style={{backgroundColor:K.s1,padding:"12px 16px",display:"flex",alignItems:"center",gap:10,boxShadow:SHADOW}}>
-        <button onClick={()=>setScreen("home")} style={bx(K.s3,K.t2,{padding:"7px 9px",display:"flex",alignItems:"center",gap:4,fontSize:12,fontWeight:600,borderRadius:10})}><ChevL sz={15}/> 홈</button>
-        <div style={{flex:1,minWidth:0}}><span style={{fontSize:13,fontWeight:600}}>{vName}</span></div>
-        <button onClick={()=>setShowKey(true)} style={bx(K.s3,apiKey?K.grn:K.t3,{padding:"6px 9px",fontSize:11,fontWeight:700,borderRadius:9})}>{apiKey?"🔑ON":"🔑"}</button>
-        {vUrl&&<button onClick={doExport} disabled={exporting} style={bx(exporting?K.t3:K.grn,"#fff",{padding:"7px 13px",fontSize:11,fontWeight:700,borderRadius:10})}>{exporting?`${Math.round(expPct)}%`:"내보내기"}</button>}
+
+      {/* Icon sidebar */}
+      <div style={{width:64,flexShrink:0,backgroundColor:K.s1,borderRight:`1px solid ${K.b1}`,display:"flex",flexDirection:"column",alignItems:"center",paddingTop:16,gap:6}}>
+        <div style={{marginBottom:10}}><LogoMark sz={30}/></div>
+        {EDITOR_TOOLS.map(([id,Icon,lbl])=>(
+          <button key={id} onClick={()=>setTool(id)} title={lbl} data-hoverlift style={bx(tool===id?K.grad:"transparent",tool===id?"#fff":K.t3,{width:44,height:44,borderRadius:12,display:"flex",alignItems:"center",justifyContent:"center"})}><Icon sz={19}/></button>
+        ))}
+        <div style={{flex:1}}/>
+        <button onClick={()=>setShowShortcuts(true)} title="단축키 (?)" data-hoverlift style={bx("transparent",K.t4,{width:40,height:40,borderRadius:10,display:"flex",alignItems:"center",justifyContent:"center",marginBottom:6})}><Keyboard sz={17}/></button>
+        <button onClick={()=>fRef.current?.click()} title="새 영상" data-hoverlift style={bx("transparent",K.t4,{width:40,height:40,borderRadius:10,display:"flex",alignItems:"center",justifyContent:"center",marginBottom:14})}><Upload sz={17}/></button>
       </div>
-      <div style={{flex:1,overflowY:"auto"}}>
-        <div style={{backgroundColor:K.t1,display:"flex",alignItems:"center",justifyContent:"center",margin:"12px 16px",borderRadius:18,overflow:"hidden"}}>
-          <div style={{position:"relative",aspectRatio:ratio.replace(":","/"),maxHeight:190,maxWidth:"100%",width:"100%"}}>
+
+      {/* Center: canvas + transport + timeline */}
+      <div style={{flex:1,display:"flex",flexDirection:"column",overflow:"hidden",minWidth:0}}>
+        <div style={{backgroundColor:K.s1,borderBottom:`1px solid ${K.b1}`,padding:"0 20px",display:"flex",alignItems:"center",gap:12,height:54,flexShrink:0}}>
+          <button onClick={()=>setScreen("home")} data-hoverlift style={bx(K.s3,K.t2,{display:"flex",alignItems:"center",gap:5,fontSize:13,fontWeight:600,padding:"7px 12px",borderRadius:9})}><ChevL sz={15}/> 홈</button>
+          <div style={{width:1,height:20,backgroundColor:K.b1}}/>
+          <div style={{flex:1,minWidth:0}}>
+            <span style={{fontSize:14,fontWeight:700,color:K.t1,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",display:"block"}}>{vName}</span>
+            {tplName&&<span style={{fontSize:10,color:K.acc,fontWeight:700}}>{tplName.e} {tplName.n} 적용됨</span>}
+          </div>
+          <div style={{display:"flex",gap:5}}>{RATIOS.map(r=><button key={r} onClick={()=>setRatio(r)} data-hoverlift style={bx(ratio===r?K.grad:K.s3,ratio===r?"#fff":K.t2,{padding:"6px 12px",fontSize:11,fontWeight:ratio===r?700:500,borderRadius:8})}>{r}</button>)}</div>
+          {vUrl&&<button onClick={doExport} disabled={exporting} data-hoverlift style={bx(exporting?K.t3:K.grn,"#fff",{padding:"9px 18px",fontSize:13,fontWeight:700,borderRadius:10,display:"flex",alignItems:"center",gap:7,boxShadow:exporting?"none":"0 3px 12px rgba(31,169,113,.3)"})}>{exporting?`${Math.round(expPct)}%`:<><Download sz={14}/>내보내기</>}</button>}
+        </div>
+
+        <div style={{flex:1,backgroundColor:K.t1,display:"flex",alignItems:"center",justifyContent:"center",overflow:"hidden",position:"relative"}}>
+          <div style={{position:"relative",aspectRatio:ratio.replace(":","/"),maxHeight:"100%",maxWidth:"100%",height:"100%"}}>
             <canvas ref={cRef} style={{width:"100%",height:"100%",display:"block"}}/>
-            {!vUrl&&<div style={{position:"absolute",inset:0,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:14,padding:24,textAlign:"center"}}>
-              <button onClick={()=>fRef.current?.click()} style={bx(K.grad,"#fff",{padding:"11px 18px",fontSize:13,fontWeight:700,borderRadius:12,display:"flex",alignItems:"center",gap:7})}><Upload sz={14}/> 영상 선택하기</button>
+            {!vUrl&&<div style={{position:"absolute",inset:0,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:16}}>
+              <div style={{width:64,height:64,background:K.grad,borderRadius:20,display:"flex",alignItems:"center",justifyContent:"center",boxShadow:"0 10px 26px rgba(139,47,214,.3)"}}><Upload sz={26} color="#fff"/></div>
+              <p style={{fontSize:16,color:"rgba(255,255,255,.7)"}}>함께 편집할 영상을 올려주세요</p>
+              <div style={{display:"flex",gap:10}}>
+                <button onClick={()=>fRef.current?.click()} data-hoverlift style={bx(K.grad,"#fff",{padding:"13px 22px",fontSize:14,fontWeight:700,borderRadius:12,display:"flex",alignItems:"center",gap:8})}><Upload sz={15}/> 내 영상 선택하기</button>
+                <button onClick={()=>loadVid("https://www.w3schools.com/html/mov_bbb.mp4","샘플_영상")} data-hoverlift style={bx("rgba(255,255,255,.1)","#fff",{padding:"13px 20px",fontSize:14,borderRadius:12,border:"1px solid rgba(255,255,255,.15)"})}>🎬 샘플로 체험</button>
+              </div>
             </div>}
+            {vUrl&&<>
+              {hasGrd&&<div style={{position:"absolute",top:14,left:14,background:K.grad,padding:"4px 10px",borderRadius:7,fontSize:10,fontWeight:800,color:"#fff"}}>● 색보정</div>}
+              {spd!==1&&<div style={{position:"absolute",top:14,right:14,backgroundColor:K.amb,color:"#1a1a1a",padding:"4px 10px",borderRadius:7,fontSize:10,fontWeight:800}}>{spd}×</div>}
+              <button onMouseDown={()=>setShowBefore(true)} onMouseUp={()=>setShowBefore(false)} onMouseLeave={()=>setShowBefore(false)} data-hoverlift style={bx("rgba(0,0,0,.5)","#fff",{position:"absolute",bottom:14,right:14,padding:"6px 12px",fontSize:11,fontWeight:700,borderRadius:9,border:"1px solid rgba(255,255,255,.14)",display:"flex",alignItems:"center",gap:6})}><Eye sz={12}/> 누르고 있으면 원본 비교</button>
+            </>}
           </div>
         </div>
-        {vUrl&&<div style={{padding:"0 16px 12px",display:"flex",alignItems:"center",gap:8}}>
-          <button onClick={togglePlay} style={bx(K.grad,"#fff",{width:38,height:38,borderRadius:"50%",display:"flex",alignItems:"center",justifyContent:"center"})}>{play?<Pause sz={14}/>:<Play sz={14} style={{marginLeft:2}}/>}</button>
-          <span style={{fontSize:11,color:K.t2,...MONO}}>{fmtT(ct)} / {fmtT(trimOut-trimIn)}</span>
+
+        {vUrl&&<div style={{backgroundColor:K.s1,borderTop:`1px solid ${K.b1}`,padding:"14px 22px"}}>
+          <div style={{position:"relative",height:16,marginBottom:10}}>
+            <div style={{position:"absolute",top:"50%",transform:"translateY(-50%)",inset:"0 0 0 0",height:4,backgroundColor:K.b1,borderRadius:2}}/>
+            <div style={{position:"absolute",top:"50%",transform:"translateY(-50%)",height:4,left:`${(trimIn/Math.max(dur,1))*100}%`,right:`${(1-trimOut/Math.max(dur,1))*100}%`,background:K.grad,opacity:.3,borderRadius:2}}/>
+            {cuts.map(c=><div key={c.id} style={{position:"absolute",top:"50%",transform:"translateY(-50%)",height:4,left:`${(c.s/Math.max(dur,1))*100}%`,width:`${((c.e-c.s)/Math.max(dur,1))*100}%`,backgroundColor:K.red+"70",borderRadius:2}}/>)}
+            <div style={{position:"absolute",top:-4,bottom:-4,width:2,background:K.grad,left:`${(ct/Math.max(dur,1))*100}%`,transform:"translateX(-50%)",pointerEvents:"none",borderRadius:2}}/>
+            <input type="range" min={0} max={dur} step={0.05} value={ct} onChange={e=>seek(Number(e.target.value))} style={{position:"absolute",inset:0,opacity:0,cursor:"pointer"}}/>
+          </div>
+          <div style={{display:"flex",alignItems:"center",gap:10}}>
+            <button onClick={undoEdit} disabled={!snapshots.length} data-hoverlift style={bx(snapshots.length?K.s3:"transparent",snapshots.length?K.t2:K.t4,{padding:"7px 11px",display:"flex",alignItems:"center",gap:5,fontSize:11,fontWeight:600,borderRadius:9})}><Rotate sz={13}/> Undo</button>
+            <div style={{width:1,height:20,backgroundColor:K.b1}}/>
+            <button onClick={()=>seek(0)} data-hoverlift style={bx("transparent",K.t3,{padding:5,display:"flex"})}><SBk sz={17}/></button>
+            <button onClick={togglePlay} data-hoverlift style={bx(K.grad,"#fff",{width:42,height:42,borderRadius:"50%",display:"flex",alignItems:"center",justifyContent:"center",boxShadow:"0 4px 14px rgba(139,47,214,.35)"})}>{play?<Pause sz={15}/>:<Play sz={15} style={{marginLeft:2}}/>}</button>
+            <button onClick={()=>seek(trimOut)} data-hoverlift style={bx("transparent",K.t3,{padding:5,display:"flex"})}><SFw sz={17}/></button>
+            <span style={{fontSize:12,color:K.t2,...MONO}}>{fmtT(ct)} / {fmtT(trimOut-trimIn)}</span>
+            <span style={{marginLeft:"auto",fontSize:11,color:K.t4,display:"flex",alignItems:"center",gap:5}}><Keyboard sz={12}/> Space로 재생 · <kbd style={{fontSize:10,backgroundColor:K.s3,padding:"2px 6px",borderRadius:4}}>?</kbd> 단축키 보기</span>
+          </div>
+          {/* Timeline tracks */}
+          <div style={{marginTop:14,display:"flex",flexDirection:"column",gap:5}}>
+            {tracks.map(track=>(
+              <div key={track.id} style={{display:"flex",alignItems:"center",gap:8}}>
+                <span style={{fontSize:9,color:track.c,fontWeight:800,width:28,flexShrink:0,letterSpacing:"0.05em"}}>{track.label}</span>
+                <div style={{position:"relative",flex:1,height:16}}>
+                  {track.id==="audio"&&<div style={{position:"absolute",inset:0,display:"flex",alignItems:"center",gap:.5,overflow:"hidden",borderRadius:3,backgroundColor:K.amb+"10"}}>{WAVE.map((h,i)=><div key={i} style={{width:2,flexShrink:0,height:`${h*100}%`,backgroundColor:K.amb,borderRadius:1,opacity:.8}}/>)}</div>}
+                  {track.id==="video"&&<div style={{position:"absolute",left:`${(trimIn/Math.max(dur,1))*100}%`,right:`${(1-trimOut/Math.max(dur,1))*100}%`,top:0,bottom:0,backgroundColor:`${K.gradTo}18`,borderRadius:3,border:`1px solid ${K.gradTo}35`}}/>}
+                  {track.items.map(item=>(<div key={item.id} style={{position:"absolute",left:`${(item.s/Math.max(dur,1))*100}%`,width:`${((item.e-item.s)/Math.max(dur,1))*100}%`,top:0,bottom:0,backgroundColor:track.c,opacity:.85,borderRadius:3,display:"flex",alignItems:"center",overflow:"hidden",paddingLeft:4}}><span style={{fontSize:8,fontWeight:800,color:"#fff",whiteSpace:"nowrap"}}>{item.label}</span></div>))}
+                  <div style={{position:"absolute",top:-3,bottom:-3,width:1.5,background:K.grad,left:`${(ct/Math.max(dur,1))*100}%`,pointerEvents:"none"}}/>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>}
-        <div style={{display:"flex",backgroundColor:K.s1,margin:"0 16px 10px",borderRadius:14,padding:4,boxShadow:SHADOW}}>
-          {[["ai",Sparkles,"AI"],["cut",Scissors,"컷"],["color",Sliders,"색보정"],["text",TypeI,"자막"],["style",Palette,"스타일"]].map(([id,Icon,lbl])=>(
-            <button key={id} onClick={()=>setTool(id)} style={bx(tool===id?K.grad:"transparent",tool===id?"#fff":K.t2,{flex:1,padding:"9px 0",fontSize:9,fontWeight:tool===id?700:500,display:"flex",flexDirection:"column",alignItems:"center",gap:3,borderRadius:11})}><Icon sz={16}/>{lbl}</button>
-          ))}
-        </div>
-        {tool==="ai"&&<div style={{padding:"0 16px"}}>
-          <div style={{display:"flex",gap:6,overflowX:"auto",marginBottom:10}}>{QUICK.map(q=><button key={q} onClick={()=>setChatIn(q)} style={bx(K.s1,K.t2,{padding:"6px 12px",fontSize:10,borderRadius:12,whiteSpace:"nowrap",flexShrink:0,boxShadow:SHADOW})}>{q}</button>)}</div>
-          {msgs.map((m,i)=><div key={i} style={{display:"flex",justifyContent:m.role==="user"?"flex-end":"flex-start",marginBottom:8}}><div style={{maxWidth:"78%",padding:"9px 13px",fontSize:12.5,borderRadius:m.role==="user"?"14px 14px 4px 14px":"14px 14px 14px 4px",background:m.role==="user"?K.grad:K.s1,color:m.role==="user"?"#fff":K.t1,boxShadow:m.role==="user"?"none":SHADOW}}>{m.content}</div></div>)}
-          <div ref={msgEnd}/>
-        </div>}
-        {tool==="style"&&<div style={{padding:"0 16px",display:"grid",gridTemplateColumns:"1fr 1fr",gap:8}}>{TPLS.map(tp=><button key={tp.id} onClick={()=>applyTpl(tp)} style={bx("transparent",K.t1,{padding:0,border:tplId===tp.id?`2px solid ${K.acc}`:"2px solid transparent",borderRadius:14,overflow:"hidden",boxShadow:SHADOW})}><div style={{height:44,background:tp.preview,display:"flex",alignItems:"center",justifyContent:"center",fontSize:18}}>{tp.e}</div><div style={{padding:"8px",backgroundColor:K.s1,fontSize:12,fontWeight:700}}>{tp.n}</div></button>)}</div>}
       </div>
-      {tool==="ai"&&<div style={{backgroundColor:K.s1,padding:"12px 16px",display:"flex",gap:8}}>
-        <input value={chatIn} onChange={e=>setChatIn(e.target.value)} onKeyDown={e=>e.key==="Enter"&&sendCmd()} placeholder="AI에게 편집을 말해보세요..." disabled={!vUrl} style={{flex:1,backgroundColor:K.s3,border:`1px solid ${K.b1}`,borderRadius:22,padding:"11px 15px",fontSize:13}}/>
-        <button onClick={sendCmd} disabled={aiWork||!vUrl} style={bx(K.grad,"#fff",{width:44,height:44,borderRadius:"50%",display:"flex",alignItems:"center",justifyContent:"center"})}><Send sz={17}/></button>
-      </div>}
+
+      {/* Right tool panel */}
+      <div style={{width:320,flexShrink:0,backgroundColor:K.s1,borderLeft:`1px solid ${K.b1}`,display:"flex",flexDirection:"column",overflow:"hidden"}}>
+        <div style={{padding:"0 18px",borderBottom:`1px solid ${K.b1}`,display:"flex",alignItems:"center",height:54,flexShrink:0}}>
+          <span style={{fontSize:13,fontWeight:800}}>{EDITOR_TOOLS.find(t=>t[0]===tool)?.[2]}</span>
+        </div>
+        <div style={{flex:1,overflowY:"auto",padding:18}}>
+          {tool==="ai"&&<div style={{display:"flex",flexDirection:"column",height:"100%"}}>
+            <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:14}}>{QUICK.map(q=><button key={q} onClick={()=>setChatIn(q)} data-hoverlift style={bx(K.s3,K.t2,{padding:"6px 12px",fontSize:11,borderRadius:12,fontWeight:600})}>{q}</button>)}</div>
+            <div style={{flex:1,display:"flex",flexDirection:"column",gap:10,marginBottom:14}}>
+              {msgs.map((m,i)=>(<div key={i} className="fadein" style={{display:"flex",justifyContent:m.role==="user"?"flex-end":"flex-start"}}><div style={{maxWidth:"85%",padding:"10px 14px",fontSize:13,lineHeight:1.6,whiteSpace:"pre-line",borderRadius:m.role==="user"?"14px 14px 4px 14px":"14px 14px 14px 4px",background:m.role==="user"?K.grad:K.s3,color:m.role==="user"?"#fff":K.t1}}>{m.content}</div></div>))}
+              <div ref={msgEnd}/>
+            </div>
+            <div style={{display:"flex",gap:8}}>
+              <input value={chatIn} onChange={e=>setChatIn(e.target.value)} onKeyDown={e=>e.key==="Enter"&&sendCmd()} placeholder={vUrl?"AI에게 편집을 말해보세요...":"영상을 먼저 불러오세요"} disabled={!vUrl} style={{flex:1,backgroundColor:K.s3,border:`1px solid ${K.b1}`,borderRadius:11,padding:"10px 13px",fontSize:13}}/>
+              <button onClick={sendCmd} disabled={aiWork||!vUrl} data-hoverlift style={bx(K.grad,"#fff",{width:40,height:40,borderRadius:11,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0})}><Send sz={16}/></button>
+            </div>
+          </div>}
+
+          {tool==="cut"&&<div>
+            <span style={LBL}>속도</span>
+            <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:18}}>{[0.25,0.5,0.75,1,1.25,1.5,2,3].map(s=><button key={s} onClick={()=>{pushSnap();setSpd(s);if(vRef.current)vRef.current.playbackRate=s;addH(`⚡ ${s}x`);}} data-hoverlift style={bx(spd===s?K.grad:K.s3,spd===s?"#fff":K.t2,{padding:"8px 0",fontSize:12,fontWeight:spd===s?700:500,borderRadius:9,flex:"1 0 calc(25% - 5px)"})}>{s}×</button>)}</div>
+            <span style={LBL}>컷 구간 (I/O 키로 빠르게 설정)</span>
+            {[["시작",cIn,setCIn,K.red],["끝",cOut,setCOut,K.grn]].map(([l,v,s,c],i)=>(<div key={i} style={{marginBottom:i===0?12:16}}><div style={{display:"flex",justifyContent:"space-between",marginBottom:4}}><span style={{fontSize:11,fontWeight:700,color:c}}>{l}</span><span style={{fontSize:11,fontWeight:700,color:c,...MONO}}>{fmtT(v)}</span></div><input type="range" min={0} max={dur} step={0.1} value={v} onChange={e=>s(Number(e.target.value))} style={{accentColor:c}}/></div>))}
+            <button onClick={()=>addCut(cIn,cOut)} data-hoverlift style={bx(K.red,"#fff",{width:"100%",padding:"12px",fontSize:13,fontWeight:700,borderRadius:11,display:"flex",alignItems:"center",justifyContent:"center",gap:6})}><Scissors sz={14}/> 삭제</button>
+          </div>}
+
+          {tool==="color"&&<div>
+            <div style={{display:"flex",gap:6,marginBottom:14}}>{TPLS.map(tp=><button key={tp.id} onClick={()=>applyTpl(tp)} data-hoverlift style={bx(tplId===tp.id?K.grad:K.s3,tplId===tp.id?"#fff":K.t2,{padding:"6px 10px",fontSize:10,fontWeight:600,borderRadius:9})}>{tp.e}</button>)}</div>
+            {gSlider("채도","saturation",0,2,"#d1478f")}{gSlider("대비","contrast",0.5,1.8,"#e0742a")}{gSlider("온도","temperature",-1,1,"#d99a1f")}{gSlider("Lift","lift",-1,1,K.t2)}{gSlider("Gamma","gamma",0.3,1.7,K.t2)}{gSlider("Gain","gain",0.3,1.7,K.t1)}{gSlider("비네팅","vignette",0,1,K.t3)}
+          </div>}
+
+          {tool==="text"&&<div>
+            <input value={txtIn} onChange={e=>setTxtIn(e.target.value)} onKeyDown={e=>e.key==="Enter"&&txtIn.trim()&&(addTxt(txtIn.trim()),setTxtIn(""))} placeholder="자막 텍스트..." style={{width:"100%",backgroundColor:K.s3,border:`1px solid ${K.b1}`,borderRadius:10,padding:"10px 13px",fontSize:13,marginBottom:12}}/>
+            <div style={{display:"flex",gap:6,marginBottom:12}}>{["top","middle","bottom"].map(p=><button key={p} onClick={()=>setTxtPos(p)} data-hoverlift style={bx(txtPos===p?K.grad:K.s3,txtPos===p?"#fff":K.t2,{flex:1,padding:"8px",fontSize:11,fontWeight:600,borderRadius:8})}>{p==="top"?"상단":p==="middle"?"중앙":"하단"}</button>)}</div>
+            <div style={{display:"flex",gap:7,marginBottom:14}}>{["#ffffff","#ffff00","#ff4444","#44ff88","#44aaff"].map(c=><div key={c} onClick={()=>setTxtClr(c)} style={{width:26,height:26,backgroundColor:c,borderRadius:"50%",cursor:"pointer",border:`2px solid ${txtClr===c?K.acc:"transparent"}`}}/>)}</div>
+            <button onClick={()=>{if(txtIn.trim()){addTxt(txtIn.trim());setTxtIn("");}}} data-hoverlift style={bx(K.grad,"#fff",{width:"100%",padding:"11px",fontSize:13,fontWeight:700,borderRadius:10})}><Plus sz={13}/> 자막 추가</button>
+          </div>}
+
+          {tool==="style"&&<div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8}}>{TPLS.map(tp=><button key={tp.id} onClick={()=>applyTpl(tp)} data-hoverlift style={bx("transparent",K.t1,{padding:0,border:tplId===tp.id?`2px solid ${K.acc}`:"2px solid transparent",borderRadius:12,overflow:"hidden"})}><div style={{height:52,background:tp.preview,display:"flex",alignItems:"center",justifyContent:"center",fontSize:18}}>{tp.e}</div><div style={{padding:"8px",backgroundColor:K.s3,fontSize:11,fontWeight:700}}>{tp.n}</div></button>)}</div>}
+        </div>
+      </div>
     </div>
   );
 
-  return(
+  /* ═══════════════ DESKTOP HOME ═══════════════ */
+  const DesktopHome=()=>(
+    <div style={{height:"100vh",backgroundColor:K.bg,color:K.t1,display:"flex",flexDirection:"column"}}>
+      {KeyModal}
+      <input ref={fRef} type="file" accept="video/*" onChange={onFile} style={{display:"none"}}/>
+      <header style={{backgroundColor:K.s1,borderBottom:`1px solid ${K.b1}`,padding:"0 28px",display:"flex",alignItems:"center",height:60,gap:24,flexShrink:0}}>
+        <div style={{display:"flex",alignItems:"center",gap:9}}><LogoMark sz={30}/><span style={{fontSize:19,fontWeight:800}}><span style={{color:K.t1}}>Edit</span><span style={{background:K.grad,WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent"}}>Us</span></span></div>
+        <div style={{display:"flex",gap:2}}>
+          {[["editor","🎬 에디터"],["trends","📊 트렌드"],["script","📝 대본"],["design","🎨 디자인"]].map(([id,lbl])=>(
+            <button key={id} onClick={()=>setHomeTab(id)} data-hoverlift style={bx(homeTab===id?K.accSoft:"transparent",homeTab===id?K.acc:K.t2,{padding:"10px 18px",fontSize:13,fontWeight:homeTab===id?700:500,borderRadius:10})}>{lbl}</button>
+          ))}
+        </div>
+        <div style={{marginLeft:"auto",display:"flex",gap:10}}>
+          <button onClick={()=>setShowShortcuts(true)} data-hoverlift style={bx(K.s3,K.t2,{padding:"9px 14px",fontSize:12,fontWeight:600,borderRadius:10,display:"flex",alignItems:"center",gap:6})}><Keyboard sz={14}/> 단축키</button>
+          <button onClick={()=>setShowKey(true)} data-hoverlift style={bx(K.s3,apiKey?K.grn:K.t2,{padding:"9px 16px",fontSize:12,fontWeight:700,borderRadius:10})}>{apiKey?"🔑 AI ON":"🔑 API 키"}</button>
+        </div>
+      </header>
+
+      <main style={{flex:1,overflowY:"auto"}}>
+        {homeTab==="editor"&&<div style={{maxWidth:1100,margin:"0 auto",padding:"40px 28px"}}>
+          <div style={{background:K.grad,borderRadius:26,padding:44,marginBottom:28,color:"#fff",display:"flex",alignItems:"center",gap:40,boxShadow:SHADOW_MD}}>
+            <div style={{flex:1}}>
+              <LogoMark sz={52}/>
+              <h1 style={{fontSize:30,fontWeight:900,margin:"18px 0 10px",letterSpacing:"-.8px"}}>당신과 AI, 함께 편집해요</h1>
+              <p style={{fontSize:15,opacity:.7,margin:"0 0 24px"}}>편집·트렌딩·대본·디자인 — 크리에이터의 하루를 AI가 함께 걷습니다</p>
+              <div style={{display:"flex",gap:10}}>
+                <button onClick={()=>setScreen("editor")} data-hoverlift style={bx("#fff",K.t1,{padding:"15px 28px",fontSize:15,fontWeight:800,borderRadius:14,display:"flex",alignItems:"center",gap:9})}><Film sz={18}/> 함께 편집 시작하기 →</button>
+                <button onClick={()=>fRef.current?.click()} data-hoverlift style={bx("rgba(255,255,255,.14)","#fff",{padding:"15px 22px",fontSize:14,fontWeight:600,borderRadius:14,border:"1px solid rgba(255,255,255,.2)"})}>영상 바로 업로드</button>
+              </div>
+            </div>
+            <div style={{display:"flex",flexDirection:"column",gap:8}}>{RATIOS.map(r=><button key={r} onClick={()=>{setRatio(r);setScreen("editor");}} data-hoverlift style={bx("rgba(255,255,255,.1)","#fff",{padding:"10px 20px",fontSize:13,fontWeight:600,borderRadius:12,border:"1px solid rgba(255,255,255,.15)",textAlign:"left"})}><span style={{fontSize:9,opacity:.6,display:"block"}}>{RLABEL[r]}</span>{r}</button>)}</div>
+          </div>
+          <span style={LBL}>크리에이터 워크플로우</span>
+          <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:16}}>
+            {[["📊","트렌딩 조사","AI 실시간 웹 검색으로 뜨는 주제 발굴",()=>setHomeTab("trends")],["📝","AI 대본 대필","훅·인트로·본론·CTA 자동 생성",()=>setHomeTab("script")],["🎨","썸네일 제작","6종 레이아웃·AI 텍스트·PNG",()=>setHomeTab("design")],["🎬","영상 편집","AI채팅·색보정·자막·속도 제어",()=>setScreen("editor")]].map(([icon,title,desc,action],i)=>(
+              <button key={i} onClick={action} data-hoverlift style={bx(K.s1,K.t1,{padding:22,borderRadius:18,textAlign:"left",boxShadow:SHADOW})}><div style={{fontSize:26,marginBottom:10}}>{icon}</div><p style={{fontSize:14,fontWeight:700,margin:"0 0 5px"}}>{title}</p><p style={{fontSize:12,color:K.t3,margin:0,lineHeight:1.5}}>{desc}</p></button>
+            ))}
+          </div>
+        </div>}
+
+        {homeTab==="trends"&&<div style={{maxWidth:1100,margin:"0 auto",padding:"36px 28px"}}>
+          <h2 style={{fontSize:24,fontWeight:800,margin:"0 0 6px"}}>📊 트렌딩 주제 조사</h2>
+          <p style={{fontSize:14,color:K.t3,marginBottom:22}}>Claude AI 실시간 웹 검색 기반 트렌드 발굴</p>
+          <div style={{backgroundColor:K.s1,borderRadius:18,padding:22,marginBottom:22,boxShadow:SHADOW}}>
+            <div style={{display:"flex",gap:10,marginBottom:12}}>
+              <input value={trendQuery} onChange={e=>setTrendQuery(e.target.value)} onKeyDown={e=>e.key==="Enter"&&generateTrends()} placeholder="분야 입력 (예: 요리, 재테크...)" style={{flex:1,backgroundColor:K.s3,border:`1px solid ${K.b1}`,borderRadius:11,padding:"12px 16px",fontSize:14}}/>
+              <button onClick={generateTrends} disabled={trendLoading} data-hoverlift style={bx(trendLoading?K.s3:K.grad,trendLoading?K.t3:"#fff",{padding:"12px 22px",fontSize:14,fontWeight:700,borderRadius:11,display:"flex",alignItems:"center",gap:7})}><TUp sz={16}/>{trendLoading?"조사 중...":"AI 조사하기"}</button>
+            </div>
+            <div style={{display:"flex",gap:7}}>{CATS.map(c=><button key={c.id} onClick={()=>{setCat(c.id);setTrendQuery(c.l.slice(2));}} data-hoverlift style={bx(cat===c.id?c.c:K.s3,cat===c.id?"#fff":K.t2,{padding:"7px 14px",fontSize:12,fontWeight:700,borderRadius:18})}>{c.l}</button>)}</div>
+          </div>
+          {trendResults.length>0&&<div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:14,marginBottom:22}}>
+            {trendResults.map((t,i)=>(<div key={i} className="fadein" style={{backgroundColor:K.s1,borderRadius:16,padding:18,boxShadow:SHADOW}}>
+              <div style={{display:"flex",justifyContent:"space-between",marginBottom:10}}><span style={{fontSize:24}}>{t.emoji}</span><span style={{fontSize:20,fontWeight:800,color:K.acc}}>{t.score}</span></div>
+              <p style={{fontSize:14,fontWeight:700,margin:"0 0 6px"}}>{t.topic}</p>
+              <p style={{fontSize:11,color:K.t3,marginBottom:10}}>{t.reason}</p>
+              <div style={{display:"flex",gap:6}}><button onClick={()=>{setScriptTopic(t.topic);setHomeTab("script");}} data-hoverlift style={bx(K.grad,"#fff",{flex:1,padding:"8px",fontSize:11,fontWeight:700,borderRadius:8})}>대본</button><button onClick={()=>{setThumbText1(t.topic);setHomeTab("design");}} data-hoverlift style={bx(K.s3,K.t2,{flex:1,padding:"8px",fontSize:11,fontWeight:600,borderRadius:8})}>썸네일</button></div>
+            </div>))}
+          </div>}
+          <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:14,marginBottom:22}}>{td.st.map((s,i)=><div key={i} style={{backgroundColor:K.s1,borderRadius:14,padding:16,boxShadow:SHADOW}}><div style={{fontSize:20}}>{s.i}</div><div style={{fontSize:20,fontWeight:800}}>{s.v}</div><div style={{fontSize:11,color:K.t3}}>{s.l}</div></div>)}</div>
+          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:16}}>
+            <div style={{backgroundColor:K.s1,borderRadius:16,padding:20,boxShadow:SHADOW}}><span style={LBL}>공통 특징 분석</span>{td.fe.map((f,i)=><div key={i} style={{marginBottom:i<td.fe.length-1?12:0}}><div style={{display:"flex",justifyContent:"space-between",marginBottom:4}}><span style={{fontSize:12,color:K.t2}}>{f.n}</span><span style={{fontSize:12,fontWeight:700,color:catI.c}}>{f.s}%</span></div><div style={{height:6,backgroundColor:K.s3,borderRadius:3}}><div style={{height:"100%",width:`${f.s}%`,backgroundColor:catI.c,borderRadius:3}}/></div></div>)}</div>
+            <div style={{backgroundColor:K.s1,borderRadius:16,padding:20,boxShadow:SHADOW}}><div style={{display:"flex",justifyContent:"space-between",marginBottom:12}}><span style={LBL}>체크리스트</span><span style={{fontSize:12,fontWeight:700,color:catI.c}}>{doneN}/{td.ck.length}</span></div>{td.ck.map((item,i)=>{const k=`${cat}-${i}`,done=ckd[k];return(<div key={i} onClick={()=>setCkd(p=>({...p,[k]:!p[k]}))} style={{display:"flex",alignItems:"center",gap:9,padding:"9px 11px",borderRadius:10,cursor:"pointer",backgroundColor:done?catI.c+"14":K.s3,marginBottom:i<td.ck.length-1?6:0}}><div style={{width:18,height:18,borderRadius:"50%",backgroundColor:done?catI.c:K.b1,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>{done&&<Check sz={10} color="#fff"/>}</div><span style={{fontSize:12,color:done?K.t1:K.t2}}>{item}</span></div>);})}</div>
+          </div>
+        </div>}
+
+        {homeTab==="script"&&<div style={{maxWidth:820,margin:"0 auto",padding:"36px 28px"}}>
+          <h2 style={{fontSize:24,fontWeight:800,margin:"0 0 6px"}}>📝 함께 쓰는 대본</h2>
+          <p style={{fontSize:14,color:K.t3,marginBottom:22}}>AI가 훅·인트로·본론·CTA를 함께 만들어드려요</p>
+          <div style={{backgroundColor:K.s1,borderRadius:20,padding:24,marginBottom:20,boxShadow:SHADOW}}>
+            <input value={scriptTopic} onChange={e=>setScriptTopic(e.target.value)} onKeyDown={e=>e.key==="Enter"&&generateScript()} placeholder="주제를 입력하세요..." style={{width:"100%",backgroundColor:K.s3,border:`1px solid ${K.b1}`,borderRadius:12,padding:"13px 16px",fontSize:15,marginBottom:16}}/>
+            <div style={{display:"grid",gridTemplateColumns:"2fr 1fr",gap:16,marginBottom:18}}>
+              <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:6}}>{SCRIPT_STYLES.map(s=><button key={s.id} onClick={()=>setScriptStyle(s.id)} data-hoverlift style={bx(scriptStyle===s.id?K.grad:K.s3,scriptStyle===s.id?"#fff":K.t2,{padding:"9px 6px",fontSize:11,fontWeight:600,borderRadius:9,textAlign:"center"})}><span style={{display:"block"}}>{s.emoji}</span>{s.name}</button>)}</div>
+              <div style={{display:"flex",gap:5}}>{SCRIPT_DURATIONS.map(d=><button key={d.id} onClick={()=>setScriptDuration(d.id)} data-hoverlift style={bx(scriptDuration===d.id?K.grad:K.s3,scriptDuration===d.id?"#fff":K.t2,{flex:1,padding:"9px 0",fontSize:10,fontWeight:600,borderRadius:8})}>{d.label}</button>)}</div>
+            </div>
+            <button onClick={generateScript} disabled={scriptLoading||!scriptTopic.trim()} data-hoverlift style={bx((scriptLoading||!scriptTopic.trim())?K.s3:K.grad,(scriptLoading||!scriptTopic.trim())?K.t3:"#fff",{width:"100%",padding:"15px",fontSize:15,fontWeight:700,borderRadius:13})}>{scriptLoading?"AI가 대본을 쓰고 있어요...":"AI와 대본 만들기"}</button>
+          </div>
+          {scriptResult&&<div>
+            <div style={{backgroundColor:K.s1,borderRadius:18,padding:20,marginBottom:14,boxShadow:SHADOW}}><h3 style={{fontSize:18,fontWeight:800,margin:0}}>{scriptResult.title}</h3></div>
+            {[{label:"🎣 훅",content:scriptResult.hook},{label:"👋 인트로",content:scriptResult.intro},...(scriptResult.sections||[]).map(s=>({label:`📖 ${s.label}`,content:s.content})),{label:"🎯 CTA",content:scriptResult.cta}].map((sec,i)=>(
+              <div key={i} style={{backgroundColor:K.s1,borderRadius:14,marginBottom:8,overflow:"hidden",boxShadow:SHADOW}}>
+                <button onClick={()=>setScriptOpenIdx(scriptOpenIdx===i?-1:i)} data-hoverlift style={bx("transparent",K.t1,{width:"100%",padding:"14px 18px",textAlign:"left",display:"flex",justifyContent:"space-between"})}><span style={{fontSize:14,fontWeight:700}}>{sec.label}</span><ChevD sz={16} style={{transform:scriptOpenIdx===i?"rotate(180deg)":"none"}}/></button>
+                {scriptOpenIdx===i&&<p style={{fontSize:13,color:K.t2,lineHeight:1.85,padding:"0 18px 18px",margin:0}}>{sec.content}</p>}
+              </div>
+            ))}
+            <button onClick={scriptToEditor} disabled={!vUrl} data-hoverlift style={bx(vUrl?K.grad:K.s3,vUrl?"#fff":K.t3,{width:"100%",padding:"14px",fontSize:14,fontWeight:700,borderRadius:13,marginTop:10})}>에디터에 자막으로 삽입</button>
+          </div>}
+        </div>}
+
+        {homeTab==="design"&&<div style={{maxWidth:1000,margin:"0 auto",padding:"36px 28px"}}>
+          <h2 style={{fontSize:24,fontWeight:800,margin:"0 0 22px"}}>🎨 함께 만드는 썸네일</h2>
+          <div style={{display:"grid",gridTemplateColumns:"1fr 320px",gap:24}}>
+            <div>
+              <div style={{backgroundColor:K.t1,borderRadius:18,overflow:"hidden",boxShadow:SHADOW_MD,marginBottom:14}}><canvas ref={thumbRef} style={{width:"100%",height:"auto",display:"block"}}/></div>
+              <button onClick={downloadThumb} data-hoverlift style={bx(K.grn,"#fff",{width:"100%",padding:"14px",fontSize:14,fontWeight:700,borderRadius:13,display:"flex",alignItems:"center",justifyContent:"center",gap:8})}><Download sz={16}/> PNG 다운로드</button>
+            </div>
+            <div>
+              <div style={{backgroundColor:K.s1,borderRadius:16,padding:16,marginBottom:12,boxShadow:SHADOW}}><span style={LBL}>레이아웃</span><div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:6}}>{THUMB_LAYOUTS.map(l=><button key={l.id} onClick={()=>{setThumbLayout(l.id);setTimeout(renderThumb,0);}} data-hoverlift style={bx(thumbLayout===l.id?K.grad:K.s3,thumbLayout===l.id?"#fff":K.t2,{padding:"9px 4px",fontSize:9,fontWeight:600,borderRadius:9})}>{l.name}</button>)}</div></div>
+              <div style={{backgroundColor:K.s1,borderRadius:16,padding:16,marginBottom:12,boxShadow:SHADOW}}><span style={LBL}>테마</span><div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:6}}>{THUMB_THEMES.map(t=><button key={t.id} onClick={()=>{setThumbTheme(t.id);setTimeout(renderThumb,0);}} data-hoverlift style={bx("transparent",K.t1,{padding:0,border:thumbTheme===t.id?`2px solid ${K.acc}`:`2px solid ${K.b1}`,borderRadius:10,overflow:"hidden"})}><div style={{height:26,background:`linear-gradient(135deg,${t.c1},${t.c2})`}}/></button>)}</div></div>
+              <div style={{backgroundColor:K.s1,borderRadius:16,padding:16,boxShadow:SHADOW}}><span style={LBL}>텍스트</span>{[["메인",thumbText1,setThumbText1],["서브",thumbText2,setThumbText2],["배지",thumbBadge,setThumbBadge]].map(([l,v,s])=><input key={l} value={v} onChange={e=>{s(e.target.value);setTimeout(renderThumb,0);}} placeholder={l} style={{width:"100%",backgroundColor:K.s3,border:`1px solid ${K.b1}`,borderRadius:9,padding:"9px 11px",fontSize:13,marginBottom:8}}/>)}</div>
+            </div>
+          </div>
+        </div>}
+      </main>
+    </div>
+  );
+
+  /* ═══════════════ MOBILE FALLBACK (compact, single column) ═══════════════ */
+  const MobileApp=()=>(
     <div style={{maxWidth:430,margin:"0 auto",height:"100vh",display:"flex",flexDirection:"column",backgroundColor:K.bg,color:K.t1}}>
       {KeyModal}
       <input ref={fRef} type="file" accept="video/*" onChange={onFile} style={{display:"none"}}/>
       <header style={{backgroundColor:K.s1,padding:"12px 18px",display:"flex",alignItems:"center",justifyContent:"space-between",boxShadow:SHADOW}}>
-        <div style={{display:"flex",alignItems:"center",gap:8}}><LogoMark sz={28}/><span style={{fontSize:17,fontWeight:800}}><span style={{color:K.t1}}>Edit</span><span style={{background:K.grad,WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent"}}>Us</span></span></div>
-        <button onClick={()=>setShowKey(true)} style={bx(K.s3,apiKey?K.grn:K.t2,{padding:"7px 13px",fontSize:12,fontWeight:700,borderRadius:10})}>{apiKey?"🔑 AI ON":"🔑 API 키"}</button>
+        <div style={{display:"flex",alignItems:"center",gap:8}}><LogoMark sz={26}/><span style={{fontSize:16,fontWeight:800}}><span style={{color:K.t1}}>Edit</span><span style={{background:K.grad,WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent"}}>Us</span></span></div>
+        <button onClick={()=>setShowKey(true)} style={bx(K.s3,apiKey?K.grn:K.t2,{padding:"7px 12px",fontSize:11,fontWeight:700,borderRadius:9})}>{apiKey?"🔑 ON":"🔑"}</button>
       </header>
-      <main style={{flex:1,overflowY:"auto",padding:16}}>
-        {homeTab==="editor"&&<div>
-          <div style={{background:K.grad,borderRadius:22,padding:22,marginBottom:18,color:"#fff"}}>
-            <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:16}}><LogoMark sz={40}/><div><p style={{fontSize:16,fontWeight:800,margin:0}}>당신과 AI, 함께 편집해요</p></div></div>
-            <button onClick={()=>setScreen("editor")} style={bx("#fff",K.t1,{width:"100%",padding:"14px",fontSize:15,fontWeight:800,borderRadius:14})}><Film sz={18}/> 함께 편집 시작하기 →</button>
-          </div>
-          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:11}}>
-            {[["📊","트렌딩 조사",()=>setHomeTab("trends")],["🎬","영상 편집",()=>setScreen("editor")]].map(([icon,title,action],i)=>(
-              <button key={i} onClick={action} style={bx(K.s1,K.t1,{padding:15,borderRadius:16,textAlign:"left",boxShadow:SHADOW})}><div style={{fontSize:21,marginBottom:8}}>{icon}</div><p style={{fontSize:12,fontWeight:700,margin:0}}>{title}</p></button>
-            ))}
-          </div>
-        </div>}
-        {homeTab==="trends"&&<div>
-          <h2 style={{fontSize:18,fontWeight:800,marginBottom:14}}>📊 트렌딩 주제 조사</h2>
-          <div style={{display:"flex",gap:6,overflowX:"auto",marginBottom:16}}>{CATS.map(c=><button key={c.id} onClick={()=>setCat(c.id)} style={bx(cat===c.id?c.c:K.s3,cat===c.id?"#fff":K.t2,{padding:"5px 12px",fontSize:11,fontWeight:700,borderRadius:18,flexShrink:0})}>{c.l}</button>)}</div>
-          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:11}}>{td.st.map((s,i)=><div key={i} style={{backgroundColor:K.s1,borderRadius:14,padding:14,boxShadow:SHADOW}}><div style={{fontSize:18}}>{s.i}</div><div style={{fontSize:18,fontWeight:800}}>{s.v}</div><div style={{fontSize:10,color:K.t3}}>{s.l}</div></div>)}</div>
-        </div>}
+      <main style={{flex:1,overflowY:"auto",padding:16,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",textAlign:"center",gap:14}}>
+        <LogoMark sz={48}/>
+        <p style={{fontSize:15,fontWeight:700}}>더 넓은 화면에서 만나요</p>
+        <p style={{fontSize:13,color:K.t3,lineHeight:1.7}}>EditUs는 PC 환경에 맞춰 최적화되어 있어요.<br/>노트북이나 데스크탑에서 열어보시면<br/>3-패널 편집기와 전체 기능을 이용할 수 있어요.</p>
+        <button onClick={()=>fRef.current?.click()} style={bx(K.grad,"#fff",{padding:"13px 24px",fontSize:13,fontWeight:700,borderRadius:12})}>모바일에서도 간단 편집 시작</button>
       </main>
-      <nav style={{display:"flex",backgroundColor:K.s1,padding:"6px 10px"}}>
-        {[["editor",Film,"에디터"],["trends",TUp,"트렌드"]].map(([id,Icon,lbl])=>(
-          <button key={id} onClick={()=>setHomeTab(id)} style={bx("transparent",homeTab===id?K.acc:K.t3,{flex:1,display:"flex",flexDirection:"column",alignItems:"center",gap:3,padding:"8px 0",borderRadius:12,backgroundColor:homeTab===id?K.accSoft:"transparent"})}><Icon sz={20}/><span style={{fontSize:9,fontWeight:homeTab===id?700:500}}>{lbl}</span></button>
-        ))}
-      </nav>
     </div>
   );
+
+  return isDesktop ? (screen==="editor" ? <DesktopEditor/> : <DesktopHome/>) : <MobileApp/>;
 }
 
 ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(App));
