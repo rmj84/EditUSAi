@@ -78,6 +78,11 @@ const Copy=p=><I {...p} ch={<><rect x="9" y="9" width="13" height="13" rx="2"/><
 const ZIn=p=><I {...p} ch={<><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></>}/>;
 const ZOut=p=><I {...p} ch={<><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="8" y1="11" x2="14" y2="11"/></>}/>;
 const Keyboard=p=><I {...p} ch={<><rect x="2" y="6" width="20" height="12" rx="2"/><line x1="6" y1="10" x2="6" y2="10"/><line x1="10" y1="10" x2="10" y2="10"/><line x1="14" y1="10" x2="14" y2="10"/><line x1="18" y1="10" x2="18" y2="10"/><line x1="6" y1="14" x2="14" y2="14"/></>}/>;
+const Sun=p=><I {...p} ch={<><circle cx="12" cy="12" r="4"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></>}/>;
+const Moon=p=><I {...p} ch={<path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>}/>;
+const Globe=p=><I {...p} ch={<><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 010 20 15.3 15.3 0 010-20z"/></>}/>;
+const Radio=p=><I {...p} ch={<><circle cx="12" cy="12" r="2"/><path d="M16.24 7.76a6 6 0 010 8.49M7.76 16.24a6 6 0 010-8.49M19.07 4.93a10 10 0 010 14.14M4.93 19.07a10 10 0 010-14.14"/></>}/>;
+const Save=p=><I {...p} ch={<><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></>}/>;
 
 /* ── EditUs Logo Mark ── */
 const LogoMark=({sz=32})=>(
@@ -93,8 +98,8 @@ const LogoMark=({sz=32})=>(
   </svg>
 );
 
-/* ── Brand tokens ── */
-const K={
+/* ── Brand tokens — LIGHT & DARK pair (theme is chosen at runtime inside App()) ── */
+const LIGHT={
   bg:"#f7f5f2", s1:"#ffffff", s2:"#fbfaf8", s3:"#f0ede8",
   b1:"#e5e0d8", b2:"#d5cec2",
   t1:"#1a1a1a", t2:"#5c564d", t3:"#9a9186", t4:"#c4bcae",
@@ -102,12 +107,50 @@ const K={
   gradTo:"#8b2fd6",
   acc:"#8b2fd6", accSoft:"rgba(139,47,214,.10)",
   grn:"#1fa971", red:"#e14b4b", amb:"#d99a1f",
+  shadow:"0 2px 10px rgba(26,20,10,.06)", shadowMd:"0 8px 26px rgba(26,20,10,.10)",
+};
+const DARK={
+  bg:"#141117", s1:"#1c1824", s2:"#211c2b", s3:"#272130",
+  b1:"#332c3f", b2:"#453b54",
+  t1:"#f3f0f7", t2:"#c7c0d1", t3:"#8d84a0", t4:"#5f5772",
+  grad:"linear-gradient(135deg,#2a2033,#a855f7)",
+  gradTo:"#a855f7",
+  acc:"#a855f7", accSoft:"rgba(168,85,247,.16)",
+  grn:"#34d399", red:"#f87171", amb:"#fbbf24",
+  shadow:"0 2px 10px rgba(0,0,0,.35)", shadowMd:"0 8px 30px rgba(0,0,0,.5)",
 };
 const MONO={fontFamily:"'SF Mono',Menlo,monospace",fontVariantNumeric:"tabular-nums"};
-const LBL={fontSize:10,fontWeight:700,letterSpacing:"0.09em",textTransform:"uppercase",color:K.t4,display:"block",marginBottom:9};
-const SHADOW="0 2px 10px rgba(26,20,10,.06)";
-const SHADOW_MD="0 8px 26px rgba(26,20,10,.10)";
 const WAVE=Array.from({length:160},(_,i)=>0.08+0.52*Math.abs(Math.sin(i*0.241+1.12))+0.28*Math.abs(Math.sin(i*0.503+0.65)));
+
+/* ── i18n ── */
+const LANGS=[{id:"ko",label:"한국어"},{id:"en",label:"English"},{id:"ja",label:"日本語"},{id:"zh",label:"中文"}];
+const LANG_NAME={ko:"Korean",en:"English",ja:"Japanese",zh:"Chinese"};
+const TR={
+  ko:{home:"홈으로",editorTab:"🎬 에디터",trendsTab:"📊 트렌드",scriptTab:"📝 대본",designTab:"🎨 디자인",channelTab:"📡 채널 분석",
+      heroTitle:"당신과 AI, 함께 편집해요",heroSub:"편집·트렌딩·대본·디자인 — 크리에이터의 하루를 AI가 함께 걷습니다",
+      startEditing:"함께 편집 시작하기 →",uploadNow:"영상 바로 업로드",shortcuts:"단축키",apiKeyOn:"🔑 AI ON",apiKeyOff:"🔑 API 키",
+      exportBtn:"내보내기",aiTool:"AI 편집",cutTool:"컷&속도",colorTool:"색보정",textTool:"자막",styleTool:"스타일",
+      trendHeading:"📊 트렌딩 주제 조사",scriptHeading:"📝 함께 쓰는 대본",designHeading:"🎨 함께 만드는 썸네일",channelHeading:"📡 내 채널 분석",
+      lastSaved:"마지막 자동저장",saving:"저장 중...",darkMode:"다크 모드",lightMode:"라이트 모드"},
+  en:{home:"Home",editorTab:"🎬 Editor",trendsTab:"📊 Trends",scriptTab:"📝 Script",designTab:"🎨 Design",channelTab:"📡 Channel Insights",
+      heroTitle:"You and AI, editing together",heroSub:"Editing · Trends · Scripts · Design — AI walks through your creator day with you",
+      startEditing:"Start Editing Together →",uploadNow:"Upload a video",shortcuts:"Shortcuts",apiKeyOn:"🔑 AI ON",apiKeyOff:"🔑 API Key",
+      exportBtn:"Export",aiTool:"AI Edit",cutTool:"Cut & Speed",colorTool:"Color",textTool:"Captions",styleTool:"Style",
+      trendHeading:"📊 Trending Topics",scriptHeading:"📝 Write a Script Together",designHeading:"🎨 Design a Thumbnail Together",channelHeading:"📡 My Channel Insights",
+      lastSaved:"Last autosaved",saving:"Saving...",darkMode:"Dark mode",lightMode:"Light mode"},
+  ja:{home:"ホーム",editorTab:"🎬 エディター",trendsTab:"📊 トレンド",scriptTab:"📝 台本",designTab:"🎨 デザイン",channelTab:"📡 チャンネル分析",
+      heroTitle:"あなたとAI、一緒に編集しよう",heroSub:"編集・トレンド・台本・デザイン — クリエイターの一日をAIと共に",
+      startEditing:"一緒に編集を始める →",uploadNow:"動画をアップロード",shortcuts:"ショートカット",apiKeyOn:"🔑 AI ON",apiKeyOff:"🔑 APIキー",
+      exportBtn:"書き出す",aiTool:"AI編集",cutTool:"カット/速度",colorTool:"カラー",textTool:"字幕",styleTool:"スタイル",
+      trendHeading:"📊 トレンド調査",scriptHeading:"📝 台本を一緒に書く",designHeading:"🎨 サムネイルを一緒に作る",channelHeading:"📡 チャンネル分析",
+      lastSaved:"最終自動保存",saving:"保存中...",darkMode:"ダークモード",lightMode:"ライトモード"},
+  zh:{home:"首页",editorTab:"🎬 编辑器",trendsTab:"📊 趋势",scriptTab:"📝 脚本",designTab:"🎨 设计",channelTab:"📡 频道分析",
+      heroTitle:"你与AI，一起剪辑",heroSub:"剪辑·趋势·脚本·设计 — AI 陪伴创作者的每一天",
+      startEditing:"一起开始剪辑 →",uploadNow:"上传视频",shortcuts:"快捷键",apiKeyOn:"🔑 AI 已开启",apiKeyOff:"🔑 API 密钥",
+      exportBtn:"导出",aiTool:"AI编辑",cutTool:"剪切/速度",colorTool:"调色",textTool:"字幕",styleTool:"样式",
+      trendHeading:"📊 热门话题调研",scriptHeading:"📝 一起写脚本",designHeading:"🎨 一起做缩略图",channelHeading:"📡 我的频道分析",
+      lastSaved:"上次自动保存",saving:"保存中...",darkMode:"深色模式",lightMode:"浅色模式"},
+};
 
 const GD0={lift:0,gamma:1,gain:1,saturation:1,contrast:1,temperature:0,tint:0,vignette:0};
 const toFilter=g=>{
@@ -159,6 +202,18 @@ const AI_TREND=`Korean YouTube trend analyst. Use web_search. Respond ONLY with 
 [{"topic":"...","emoji":"...","score":85,"competition":"낮음|보통|높음","cpm":"낮음|보통|높음","reason":"...","ideas":[]}]
 Return exactly 6 items.`;
 const AI_THUMB=`Suggest YouTube thumbnail text. Respond ONLY with JSON: {"main":"...","sub":"...","badge":"HOT|NEW|충격|실화|필수|최초|단독"}`;
+const AI_CHANNEL=`You are a social media performance analyst. Use web_search to find real public information about
+the given YouTube/Instagram account (recent videos, view counts if visible, general audience reaction).
+Respond ONLY with JSON (no markdown):
+{
+  "handle":"확인된 채널명/핸들",
+  "top_videos":[{"title":"...","note":"조회수 등 확인 가능한 정보 요약"}],
+  "editing_style":["편집 스타일 특징 1","특징 2","특징 3"],
+  "comment_sentiment":{"positive":70,"negative":10,"neutral":20,"summary":"댓글 반응 전반적 요약 1-2문장"},
+  "recommendations":["다음에 시도해볼 것 1","2","3"]
+}
+If you cannot find reliable public data, say so honestly inside the summary field rather than inventing numbers.
+Respond in {{LANG}}.`;
 
 const bx=(bg,fg="#fff",ex={})=>({backgroundColor:bg,color:fg,border:"none",cursor:"pointer",fontFamily:"inherit",...ex});
 const fmtT=s=>{const n=Math.max(0,Math.floor(s||0));return`${Math.floor(n/60)}:${String(n%60).padStart(2,"0")}`;};
@@ -167,6 +222,24 @@ const fmtT=s=>{const n=Math.max(0,Math.floor(s||0));return`${Math.floor(n/60)}:$
 function App(){
   const [isDesktop,setIsDesktop]=useState(()=>typeof window!=="undefined"?window.innerWidth>=980:true);
   useEffect(()=>{const fn=()=>setIsDesktop(window.innerWidth>=980);window.addEventListener("resize",fn);return()=>window.removeEventListener("resize",fn);},[]);
+
+  /* ── Safe localStorage helpers (browsers without storage access, e.g. some
+     embedded/sandboxed previews, throw here — we degrade gracefully) ── */
+  const safeGet=k=>{try{return localStorage.getItem(k);}catch{return null;}};
+  const safeSet=(k,v)=>{try{localStorage.setItem(k,v);return true;}catch{return false;}};
+
+  /* ── 🌓 Theme (dark/light) ── */
+  const [theme,setTheme]=useState(()=>safeGet("editus_theme")||"light");
+  useEffect(()=>{safeSet("editus_theme",theme);},[theme]);
+  const K = theme==="dark" ? DARK : LIGHT;
+  const SHADOW=K.shadow, SHADOW_MD=K.shadowMd;
+  const LBL={fontSize:10,fontWeight:700,letterSpacing:"0.09em",textTransform:"uppercase",color:K.t4,display:"block",marginBottom:9};
+
+  /* ── 🌐 Language ── */
+  const [lang,setLang]=useState(()=>safeGet("editus_lang")||"ko");
+  useEffect(()=>{safeSet("editus_lang",lang);},[lang]);
+  const t=key=>TR[lang]?.[key]||TR.ko[key]||key;
+  const [showLang,setShowLang]=useState(false);
 
   const [apiKey,setApiKey]=useState(""), [showKey,setShowKey]=useState(false);
   const [showShortcuts,setShowShortcuts]=useState(false);
@@ -213,6 +286,16 @@ function App(){
 
   const [trendResults,setTrendResults]=useState([]), [trendLoading,setTrendLoading]=useState(false), [trendQuery,setTrendQuery]=useState("");
 
+  /* ── 📡 Channel/account analysis ── */
+  const [chPlatform,setChPlatform]=useState("youtube");
+  const [chHandle,setChHandle]=useState("");
+  const [chResult,setChResult]=useState(null), [chLoading,setChLoading]=useState(false);
+
+  /* ── 💾 Auto-save (every 10 minutes, to localStorage; degrades gracefully if unavailable) ── */
+  const [lastSaved,setLastSaved]=useState(null);
+  const [autosaveOk,setAutosaveOk]=useState(true);
+  const [restorePrompt,setRestorePrompt]=useState(false);
+
   const vRef=useRef(null), cRef=useRef(null), fRef=useRef(null), animR=useRef(null), msgEnd=useRef(null);
   const gR=useRef(grade), oR=useRef(overlays), cuR=useRef(cuts), bfR=useRef(false), uR=useRef(null);
 
@@ -222,6 +305,42 @@ function App(){
   useEffect(()=>{bfR.current=showBefore},[showBefore]);
   useEffect(()=>{uR.current=vUrl},[vUrl]);
   useEffect(()=>{msgEnd.current?.scrollIntoView({behavior:"smooth"})},[msgs]);
+
+  /* ── 💾 Auto-save every 10 minutes ──
+     Saves editing settings (grade, cuts, overlays, script draft, thumbnail draft, etc.)
+     NOT the video file itself — a Blob URL can't be serialized to storage, so after a
+     browser restart the user re-picks the video but their edits/settings come back. */
+  const AUTOSAVE_KEY="editus_autosave_v1";
+  const stateRef=useRef(null);
+  stateRef.current={
+    vName, ratio, grade, overlays, cuts, trimIn, trimOut, tplId, spd,
+    scriptTopic, scriptStyle, scriptDuration, scriptResult,
+    thumbFormat, thumbLayout, thumbTheme, thumbText1, thumbText2, thumbBadge,
+  };
+  useEffect(()=>{
+    const iv=setInterval(()=>{
+      const ok=safeSet(AUTOSAVE_KEY, JSON.stringify({...stateRef.current, savedAt:new Date().toISOString()}));
+      setAutosaveOk(ok);
+      if(ok) setLastSaved(new Date());
+    }, 10*60*1000); // 10분
+    return ()=>clearInterval(iv);
+  },[]);
+  useEffect(()=>{ if(safeGet(AUTOSAVE_KEY)) setRestorePrompt(true); },[]);
+  const restoreAutosave=()=>{
+    const raw=safeGet(AUTOSAVE_KEY); if(!raw){setRestorePrompt(false);return;}
+    try{
+      const s=JSON.parse(raw);
+      setVName(s.vName||"복구된 프로젝트"); setRatio(s.ratio||"16:9");
+      setGrade(s.grade||{...GD0}); setOverlays(s.overlays||[]); setCuts(s.cuts||[]);
+      setTrimIn(s.trimIn||0); setTrimOut(s.trimOut||0); setTplId(s.tplId||null); setSpd(s.spd||1);
+      setScriptTopic(s.scriptTopic||""); setScriptStyle(s.scriptStyle||"tutorial"); setScriptDuration(s.scriptDuration||"7"); setScriptResult(s.scriptResult||null);
+      setThumbFormat(s.thumbFormat||"youtube"); setThumbLayout(s.thumbLayout||"bold"); setThumbTheme(s.thumbTheme||"mono");
+      setThumbText1(s.thumbText1||"제목을 입력하세요"); setThumbText2(s.thumbText2||"채널명"); setThumbBadge(s.thumbBadge||"HOT");
+      setLastSaved(new Date(s.savedAt||Date.now()));
+    }catch{}
+    setRestorePrompt(false);
+  };
+  const dismissAutosave=()=>{safeSet(AUTOSAVE_KEY,"");setRestorePrompt(false);};
 
   /* ── ⌨️ Keyboard shortcuts (PC-only convenience layer) ── */
   useEffect(()=>{
@@ -382,6 +501,29 @@ function App(){
     setTrendLoading(false);
   };
 
+  /* ── 📡 Channel / account analysis (public web-search based, no OAuth backend) ── */
+  const generateChannelAnalysis=async()=>{
+    if(!chHandle.trim()||chLoading)return;
+    setChLoading(true);setChResult(null);
+    const fallback=()=>setChResult({
+      handle:chHandle,
+      top_videos:[{title:"(데모) 최근 인기 영상 예시",note:"실제 데이터는 API 키 연결 시 웹 검색으로 확인돼요"}],
+      editing_style:["빠른 컷 전환이 잦은 편","자막을 화면 하단에 크게 배치","도입부 5초 안에 핵심 장면 노출"],
+      comment_sentiment:{positive:72,negative:9,neutral:19,summary:"전반적으로 긍정적인 반응이 많고, 편집 속도에 대한 칭찬이 자주 보여요. (데모 데이터)"},
+      recommendations:["숏폼 비중을 조금 더 늘려보기","댓글에서 반복되는 질문을 다음 영상 주제로 활용하기"],
+    });
+    if(!apiKey.trim()){fallback();setChLoading(false);return;}
+    try{
+      const sys=AI_CHANNEL.replace("{{LANG}}",LANG_NAME[lang]||"Korean");
+      const res=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json","x-api-key":apiKey.trim(),"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},body:JSON.stringify({model:"claude-sonnet-4-6",max_tokens:1500,system:sys,tools:[{type:"web_search_20250305",name:"web_search"}],messages:[{role:"user",content:`플랫폼: ${chPlatform}\n계정: ${chHandle}\n이 계정의 최근 영상 성과, 편집 스타일 특징, 댓글 반응을 공개된 정보 기반으로 분석해줘.`}]})});
+      const data=await res.json();
+      const text=data.content.filter(b=>b.type==="text").map(b=>b.text).join("");
+      const match=text.replace(/```json|```/g,"").match(/\{[\s\S]*\}/);
+      if(match)setChResult(JSON.parse(match[0]));else fallback();
+    }catch{fallback();}
+    setChLoading(false);
+  };
+
   const renderThumb=useCallback(()=>{
     const c=thumbRef.current;if(!c)return;
     const ctx=c.getContext("2d");
@@ -405,7 +547,7 @@ function App(){
   const hasGrd=grade.lift!==0||grade.saturation!==1||grade.contrast!==1||grade.temperature!==0||grade.gain!==1||(grade.vignette||0)>0;
   const tplName=TPLS.find(t=>t.id===tplId);
   const QUICK=["영화처럼 만들어줘","따뜻하게 바꿔줘","슬로모션으로","자막 넣어줘","초기화해줘"];
-  const EDITOR_TOOLS=[["ai",Sparkles,"AI 편집"],["cut",Scissors,"컷&속도"],["color",Sliders,"색보정"],["text",TypeI,"자막"],["style",Palette,"스타일"]];
+  const EDITOR_TOOLS=[["ai",Sparkles,t("aiTool")],["cut",Scissors,t("cutTool")],["color",Sliders,t("colorTool")],["text",TypeI,t("textTool")],["style",Palette,t("styleTool")]];
 
   const gSlider=(label,key,min,max,col)=>(
     <div key={key} style={{marginBottom:12}}>
@@ -449,11 +591,12 @@ function App(){
 
       {/* Icon sidebar */}
       <div style={{width:64,flexShrink:0,backgroundColor:K.s1,borderRight:`1px solid ${K.b1}`,display:"flex",flexDirection:"column",alignItems:"center",paddingTop:16,gap:6}}>
-        <button onClick={()=>{setScreen("home");setHomeTab("editor");}} title="홈으로" data-hoverlift style={bx("transparent","inherit",{marginBottom:10,padding:0,borderRadius:10,display:"flex"})}><LogoMark sz={30}/></button>
+        <button onClick={()=>{setScreen("home");setHomeTab("editor");}} title={t("home")} data-hoverlift style={bx("transparent","inherit",{marginBottom:10,padding:0,borderRadius:10,display:"flex"})}><LogoMark sz={30}/></button>
         {EDITOR_TOOLS.map(([id,Icon,lbl])=>(
           <button key={id} onClick={()=>setTool(id)} title={lbl} data-hoverlift style={bx(tool===id?K.grad:"transparent",tool===id?"#fff":K.t3,{width:44,height:44,borderRadius:12,display:"flex",alignItems:"center",justifyContent:"center"})}><Icon sz={19}/></button>
         ))}
         <div style={{flex:1}}/>
+        <button onClick={()=>setTheme(th=>th==="dark"?"light":"dark")} title={theme==="dark"?t("lightMode"):t("darkMode")} data-hoverlift style={bx("transparent",K.t4,{width:40,height:40,borderRadius:10,display:"flex",alignItems:"center",justifyContent:"center",marginBottom:6})}>{theme==="dark"?<Sun sz={17}/>:<Moon sz={17}/>}</button>
         <button onClick={()=>setShowShortcuts(true)} title="단축키 (?)" data-hoverlift style={bx("transparent",K.t4,{width:40,height:40,borderRadius:10,display:"flex",alignItems:"center",justifyContent:"center",marginBottom:6})}><Keyboard sz={17}/></button>
         <button onClick={()=>fRef.current?.click()} title="새 영상" data-hoverlift style={bx("transparent",K.t4,{width:40,height:40,borderRadius:10,display:"flex",alignItems:"center",justifyContent:"center",marginBottom:14})}><Upload sz={17}/></button>
       </div>
@@ -569,33 +712,56 @@ function App(){
   );
 
   /* ═══════════════ DESKTOP HOME ═══════════════ */
+  const LangSwitcher=()=>(
+    <div style={{position:"relative"}}>
+      <button onClick={()=>setShowLang(s=>!s)} data-hoverlift style={bx(K.s3,K.t2,{padding:"9px 12px",fontSize:12,fontWeight:600,borderRadius:10,display:"flex",alignItems:"center",gap:6})}><Globe sz={14}/> {LANGS.find(l=>l.id===lang)?.label}</button>
+      {showLang&&<div className="fadein" style={{position:"absolute",top:"calc(100% + 6px)",right:0,backgroundColor:K.s1,borderRadius:12,boxShadow:SHADOW_MD,padding:6,zIndex:50,minWidth:130}}>
+        {LANGS.map(l=><button key={l.id} onClick={()=>{setLang(l.id);setShowLang(false);}} data-hoverlift style={bx(lang===l.id?K.accSoft:"transparent",lang===l.id?K.acc:K.t2,{width:"100%",padding:"9px 12px",fontSize:12,fontWeight:lang===l.id?700:500,borderRadius:8,textAlign:"left"})}>{l.label}</button>)}
+      </div>}
+    </div>
+  );
+  const ThemeToggle=()=>(
+    <button onClick={()=>setTheme(th=>th==="dark"?"light":"dark")} title={theme==="dark"?t("lightMode"):t("darkMode")} data-hoverlift style={bx(K.s3,K.t2,{width:38,height:38,borderRadius:10,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0})}>{theme==="dark"?<Sun sz={16}/>:<Moon sz={16}/>}</button>
+  );
+  const AutosaveBanner=()=>restorePrompt?(
+    <div style={{backgroundColor:K.accSoft,borderBottom:`1px solid ${K.b1}`,padding:"9px 28px",display:"flex",alignItems:"center",gap:10,fontSize:12,color:K.t2}}>
+      <Save sz={13} color={K.acc}/><span>이전에 자동저장된 편집 설정이 있어요. 불러올까요?</span>
+      <button onClick={restoreAutosave} data-hoverlift style={bx(K.grad,"#fff",{padding:"5px 12px",fontSize:11,fontWeight:700,borderRadius:8,marginLeft:"auto"})}>불러오기</button>
+      <button onClick={dismissAutosave} data-hoverlift style={bx(K.s3,K.t3,{padding:"5px 12px",fontSize:11,fontWeight:600,borderRadius:8})}>무시</button>
+    </div>
+  ):null;
+
   const DesktopHome=()=>(
     <div style={{height:"100vh",backgroundColor:K.bg,color:K.t1,display:"flex",flexDirection:"column"}}>
       {KeyModal}
       <input ref={fRef} type="file" accept="video/*" onChange={onFile} style={{display:"none"}}/>
       <header style={{backgroundColor:K.s1,borderBottom:`1px solid ${K.b1}`,padding:"0 28px",display:"flex",alignItems:"center",height:60,gap:24,flexShrink:0}}>
-        <button onClick={()=>{setScreen("home");setHomeTab("editor");}} title="홈으로" data-hoverlift style={bx("transparent","inherit",{display:"flex",alignItems:"center",gap:9,padding:0,borderRadius:10})}><LogoMark sz={30}/><span style={{fontSize:19,fontWeight:800}}><span style={{color:K.t1}}>Edit</span><span style={{background:K.grad,WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent"}}>Us</span></span></button>
+        <button onClick={()=>{setScreen("home");setHomeTab("editor");}} title={t("home")} data-hoverlift style={bx("transparent","inherit",{display:"flex",alignItems:"center",gap:9,padding:0,borderRadius:10})}><LogoMark sz={30}/><span style={{fontSize:19,fontWeight:800}}><span style={{color:K.t1}}>Edit</span><span style={{background:K.grad,WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent"}}>Us</span></span></button>
         <div style={{display:"flex",gap:2}}>
-          {[["editor","🎬 에디터"],["trends","📊 트렌드"],["script","📝 대본"],["design","🎨 디자인"]].map(([id,lbl])=>(
-            <button key={id} onClick={()=>setHomeTab(id)} data-hoverlift style={bx(homeTab===id?K.accSoft:"transparent",homeTab===id?K.acc:K.t2,{padding:"10px 18px",fontSize:13,fontWeight:homeTab===id?700:500,borderRadius:10})}>{lbl}</button>
+          {[["editor",t("editorTab")],["trends",t("trendsTab")],["script",t("scriptTab")],["design",t("designTab")],["channel",t("channelTab")]].map(([id,lbl])=>(
+            <button key={id} onClick={()=>setHomeTab(id)} data-hoverlift style={bx(homeTab===id?K.accSoft:"transparent",homeTab===id?K.acc:K.t2,{padding:"10px 16px",fontSize:13,fontWeight:homeTab===id?700:500,borderRadius:10,whiteSpace:"nowrap"})}>{lbl}</button>
           ))}
         </div>
-        <div style={{marginLeft:"auto",display:"flex",gap:10}}>
-          <button onClick={()=>setShowShortcuts(true)} data-hoverlift style={bx(K.s3,K.t2,{padding:"9px 14px",fontSize:12,fontWeight:600,borderRadius:10,display:"flex",alignItems:"center",gap:6})}><Keyboard sz={14}/> 단축키</button>
-          <button onClick={()=>setShowKey(true)} data-hoverlift style={bx(K.s3,apiKey?K.grn:K.t2,{padding:"9px 16px",fontSize:12,fontWeight:700,borderRadius:10})}>{apiKey?"🔑 AI ON":"🔑 API 키"}</button>
+        <div style={{marginLeft:"auto",display:"flex",gap:10,alignItems:"center"}}>
+          {lastSaved&&<span style={{fontSize:10,color:K.t4,display:"flex",alignItems:"center",gap:4}}><Save sz={11}/> {t("lastSaved")} {lastSaved.toLocaleTimeString("ko-KR",{hour:"2-digit",minute:"2-digit"})}</span>}
+          <ThemeToggle/>
+          <LangSwitcher/>
+          <button onClick={()=>setShowShortcuts(true)} data-hoverlift style={bx(K.s3,K.t2,{padding:"9px 14px",fontSize:12,fontWeight:600,borderRadius:10,display:"flex",alignItems:"center",gap:6})}><Keyboard sz={14}/> {t("shortcuts")}</button>
+          <button onClick={()=>setShowKey(true)} data-hoverlift style={bx(K.s3,apiKey?K.grn:K.t2,{padding:"9px 16px",fontSize:12,fontWeight:700,borderRadius:10})}>{apiKey?t("apiKeyOn"):t("apiKeyOff")}</button>
         </div>
       </header>
+      <AutosaveBanner/>
 
       <main style={{flex:1,overflowY:"auto"}}>
         {homeTab==="editor"&&<div style={{maxWidth:1100,margin:"0 auto",padding:"40px 28px"}}>
           <div style={{background:K.grad,borderRadius:26,padding:44,marginBottom:28,color:"#fff",display:"flex",alignItems:"center",gap:40,boxShadow:SHADOW_MD}}>
             <div style={{flex:1}}>
               <LogoMark sz={52}/>
-              <h1 style={{fontSize:30,fontWeight:900,margin:"18px 0 10px",letterSpacing:"-.8px"}}>당신과 AI, 함께 편집해요</h1>
-              <p style={{fontSize:15,opacity:.7,margin:"0 0 24px"}}>편집·트렌딩·대본·디자인 — 크리에이터의 하루를 AI가 함께 걷습니다</p>
+              <h1 style={{fontSize:30,fontWeight:900,margin:"18px 0 10px",letterSpacing:"-.8px"}}>{t("heroTitle")}</h1>
+              <p style={{fontSize:15,opacity:.7,margin:"0 0 24px"}}>{t("heroSub")}</p>
               <div style={{display:"flex",gap:10}}>
-                <button onClick={()=>setScreen("editor")} data-hoverlift style={bx("#fff",K.t1,{padding:"15px 28px",fontSize:15,fontWeight:800,borderRadius:14,display:"flex",alignItems:"center",gap:9})}><Film sz={18}/> 함께 편집 시작하기 →</button>
-                <button onClick={()=>fRef.current?.click()} data-hoverlift style={bx("rgba(255,255,255,.14)","#fff",{padding:"15px 22px",fontSize:14,fontWeight:600,borderRadius:14,border:"1px solid rgba(255,255,255,.2)"})}>영상 바로 업로드</button>
+                <button onClick={()=>setScreen("editor")} data-hoverlift style={bx("#fff",K.t1,{padding:"15px 28px",fontSize:15,fontWeight:800,borderRadius:14,display:"flex",alignItems:"center",gap:9})}><Film sz={18}/> {t("startEditing")}</button>
+                <button onClick={()=>fRef.current?.click()} data-hoverlift style={bx("rgba(255,255,255,.14)","#fff",{padding:"15px 22px",fontSize:14,fontWeight:600,borderRadius:14,border:"1px solid rgba(255,255,255,.2)"})}>{t("uploadNow")}</button>
               </div>
             </div>
             <div style={{display:"flex",flexDirection:"column",gap:8}}>{RATIOS.map(r=><button key={r} onClick={()=>{setRatio(r);setScreen("editor");}} data-hoverlift style={bx("rgba(255,255,255,.1)","#fff",{padding:"10px 20px",fontSize:13,fontWeight:600,borderRadius:12,border:"1px solid rgba(255,255,255,.15)",textAlign:"left"})}><span style={{fontSize:9,opacity:.6,display:"block"}}>{RLABEL[r]}</span>{r}</button>)}</div>
@@ -609,7 +775,7 @@ function App(){
         </div>}
 
         {homeTab==="trends"&&<div style={{maxWidth:1100,margin:"0 auto",padding:"36px 28px"}}>
-          <h2 style={{fontSize:24,fontWeight:800,margin:"0 0 6px"}}>📊 트렌딩 주제 조사</h2>
+          <h2 style={{fontSize:24,fontWeight:800,margin:"0 0 6px"}}>{t("trendHeading")}</h2>
           <p style={{fontSize:14,color:K.t3,marginBottom:22}}>Claude AI 실시간 웹 검색 기반 트렌드 발굴</p>
           <div style={{backgroundColor:K.s1,borderRadius:18,padding:22,marginBottom:22,boxShadow:SHADOW}}>
             <div style={{display:"flex",gap:10,marginBottom:12}}>
@@ -634,7 +800,7 @@ function App(){
         </div>}
 
         {homeTab==="script"&&<div style={{maxWidth:820,margin:"0 auto",padding:"36px 28px"}}>
-          <h2 style={{fontSize:24,fontWeight:800,margin:"0 0 6px"}}>📝 함께 쓰는 대본</h2>
+          <h2 style={{fontSize:24,fontWeight:800,margin:"0 0 6px"}}>{t("scriptHeading")}</h2>
           <p style={{fontSize:14,color:K.t3,marginBottom:22}}>AI가 훅·인트로·본론·CTA를 함께 만들어드려요</p>
           <div style={{backgroundColor:K.s1,borderRadius:20,padding:24,marginBottom:20,boxShadow:SHADOW}}>
             <input value={scriptTopic} onChange={e=>setScriptTopic(e.target.value)} onKeyDown={e=>e.key==="Enter"&&generateScript()} placeholder="주제를 입력하세요..." style={{width:"100%",backgroundColor:K.s3,border:`1px solid ${K.b1}`,borderRadius:12,padding:"13px 16px",fontSize:15,marginBottom:16}}/>
@@ -657,7 +823,7 @@ function App(){
         </div>}
 
         {homeTab==="design"&&<div style={{maxWidth:1000,margin:"0 auto",padding:"36px 28px"}}>
-          <h2 style={{fontSize:24,fontWeight:800,margin:"0 0 22px"}}>🎨 함께 만드는 썸네일</h2>
+          <h2 style={{fontSize:24,fontWeight:800,margin:"0 0 22px"}}>{t("designHeading")}</h2>
           <div style={{display:"grid",gridTemplateColumns:"1fr 320px",gap:24}}>
             <div>
               <div style={{backgroundColor:K.t1,borderRadius:18,overflow:"hidden",boxShadow:SHADOW_MD,marginBottom:14}}><canvas ref={thumbRef} style={{width:"100%",height:"auto",display:"block"}}/></div>
@@ -665,10 +831,67 @@ function App(){
             </div>
             <div>
               <div style={{backgroundColor:K.s1,borderRadius:16,padding:16,marginBottom:12,boxShadow:SHADOW}}><span style={LBL}>레이아웃</span><div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:6}}>{THUMB_LAYOUTS.map(l=><button key={l.id} onClick={()=>{setThumbLayout(l.id);setTimeout(renderThumb,0);}} data-hoverlift style={bx(thumbLayout===l.id?K.grad:K.s3,thumbLayout===l.id?"#fff":K.t2,{padding:"9px 4px",fontSize:9,fontWeight:600,borderRadius:9})}>{l.name}</button>)}</div></div>
-              <div style={{backgroundColor:K.s1,borderRadius:16,padding:16,marginBottom:12,boxShadow:SHADOW}}><span style={LBL}>테마</span><div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:6}}>{THUMB_THEMES.map(t=><button key={t.id} onClick={()=>{setThumbTheme(t.id);setTimeout(renderThumb,0);}} data-hoverlift style={bx("transparent",K.t1,{padding:0,border:thumbTheme===t.id?`2px solid ${K.acc}`:`2px solid ${K.b1}`,borderRadius:10,overflow:"hidden"})}><div style={{height:26,background:`linear-gradient(135deg,${t.c1},${t.c2})`}}/></button>)}</div></div>
+              <div style={{backgroundColor:K.s1,borderRadius:16,padding:16,marginBottom:12,boxShadow:SHADOW}}><span style={LBL}>테마</span><div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:6}}>{THUMB_THEMES.map(th=><button key={th.id} onClick={()=>{setThumbTheme(th.id);setTimeout(renderThumb,0);}} data-hoverlift style={bx("transparent",K.t1,{padding:0,border:thumbTheme===th.id?`2px solid ${K.acc}`:`2px solid ${K.b1}`,borderRadius:10,overflow:"hidden"})}><div style={{height:26,background:`linear-gradient(135deg,${th.c1},${th.c2})`}}/></button>)}</div></div>
               <div style={{backgroundColor:K.s1,borderRadius:16,padding:16,boxShadow:SHADOW}}><span style={LBL}>텍스트</span>{[["메인",thumbText1,setThumbText1],["서브",thumbText2,setThumbText2],["배지",thumbBadge,setThumbBadge]].map(([l,v,s])=><input key={l} value={v} onChange={e=>{s(e.target.value);setTimeout(renderThumb,0);}} placeholder={l} style={{width:"100%",backgroundColor:K.s3,border:`1px solid ${K.b1}`,borderRadius:9,padding:"9px 11px",fontSize:13,marginBottom:8}}/>)}</div>
             </div>
           </div>
+        </div>}
+
+        {homeTab==="channel"&&<div style={{maxWidth:900,margin:"0 auto",padding:"36px 28px"}}>
+          <h2 style={{fontSize:24,fontWeight:800,margin:"0 0 6px"}}>{t("channelHeading")}</h2>
+          <p style={{fontSize:14,color:K.t3,marginBottom:22}}>내 유튜브·인스타그램 계정을 검색해서 잘 되는 영상, 편집 스타일, 댓글 반응을 AI가 함께 살펴봐요</p>
+          <div style={{backgroundColor:K.s1,borderRadius:20,padding:24,marginBottom:22,boxShadow:SHADOW}}>
+            <div style={{display:"flex",gap:8,marginBottom:14}}>
+              {[["youtube","▶️ YouTube"],["instagram","📸 Instagram"]].map(([id,lbl])=>(
+                <button key={id} onClick={()=>setChPlatform(id)} data-hoverlift style={bx(chPlatform===id?K.grad:K.s3,chPlatform===id?"#fff":K.t2,{padding:"9px 16px",fontSize:12,fontWeight:600,borderRadius:10})}>{lbl}</button>
+              ))}
+            </div>
+            <div style={{display:"flex",gap:10}}>
+              <input value={chHandle} onChange={e=>setChHandle(e.target.value)} onKeyDown={e=>e.key==="Enter"&&generateChannelAnalysis()} placeholder="채널 URL 또는 @핸들 입력 (예: @mintech_kr)" style={{flex:1,backgroundColor:K.s3,border:`1px solid ${K.b1}`,borderRadius:12,padding:"13px 16px",fontSize:14}}/>
+              <button onClick={generateChannelAnalysis} disabled={chLoading||!chHandle.trim()} data-hoverlift style={bx((chLoading||!chHandle.trim())?K.s3:K.grad,(chLoading||!chHandle.trim())?K.t3:"#fff",{padding:"13px 22px",fontSize:14,fontWeight:700,borderRadius:12,display:"flex",alignItems:"center",gap:8})}><Radio sz={15}/>{chLoading?"분석 중...":"AI 분석"}</button>
+            </div>
+            {!apiKey&&<p style={{fontSize:11,color:K.t3,marginTop:10}}>⚙️ API 키 없이는 데모 데이터로 보여드려요. 🔑에서 키를 입력하면 실제 공개 정보 기반 검색 분석이 가능해요.</p>}
+          </div>
+
+          {chResult&&<div className="fadein">
+            <div style={{backgroundColor:K.s1,borderRadius:18,padding:20,marginBottom:16,boxShadow:SHADOW}}>
+              <span style={LBL}>분석 대상</span>
+              <p style={{fontSize:16,fontWeight:700,margin:0}}>{chResult.handle}</p>
+            </div>
+            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:16,marginBottom:16}}>
+              <div style={{backgroundColor:K.s1,borderRadius:16,padding:18,boxShadow:SHADOW}}>
+                <span style={LBL}>🎬 최근 잘 되는 영상</span>
+                {(chResult.top_videos||[]).map((v,i)=>(
+                  <div key={i} style={{padding:"9px 0",borderBottom:i<chResult.top_videos.length-1?`1px solid ${K.b1}`:"none"}}>
+                    <p style={{fontSize:13,fontWeight:600,margin:0}}>{v.title}</p>
+                    <p style={{fontSize:11,color:K.t3,margin:"3px 0 0"}}>{v.note}</p>
+                  </div>
+                ))}
+              </div>
+              <div style={{backgroundColor:K.s1,borderRadius:16,padding:18,boxShadow:SHADOW}}>
+                <span style={LBL}>✂️ 편집 스타일 특징</span>
+                {(chResult.editing_style||[]).map((s,i)=>(<div key={i} style={{display:"flex",alignItems:"center",gap:8,padding:"7px 0"}}><Scissors sz={12} color={K.acc}/><span style={{fontSize:13,color:K.t2}}>{s}</span></div>))}
+              </div>
+            </div>
+            {chResult.comment_sentiment&&<div style={{backgroundColor:K.s1,borderRadius:16,padding:18,marginBottom:16,boxShadow:SHADOW}}>
+              <span style={LBL}>💬 댓글 반응</span>
+              <div style={{display:"flex",height:14,borderRadius:7,overflow:"hidden",marginBottom:10}}>
+                <div style={{width:`${chResult.comment_sentiment.positive}%`,backgroundColor:K.grn}}/>
+                <div style={{width:`${chResult.comment_sentiment.neutral}%`,backgroundColor:K.t4}}/>
+                <div style={{width:`${chResult.comment_sentiment.negative}%`,backgroundColor:K.red}}/>
+              </div>
+              <div style={{display:"flex",gap:16,marginBottom:10,fontSize:11,color:K.t3}}>
+                <span>🟢 긍정 {chResult.comment_sentiment.positive}%</span>
+                <span>⚪ 중립 {chResult.comment_sentiment.neutral}%</span>
+                <span>🔴 부정 {chResult.comment_sentiment.negative}%</span>
+              </div>
+              <p style={{fontSize:13,color:K.t2,margin:0,lineHeight:1.7}}>{chResult.comment_sentiment.summary}</p>
+            </div>}
+            {chResult.recommendations&&<div style={{backgroundColor:K.accSoft,borderRadius:16,padding:18,boxShadow:SHADOW}}>
+              <span style={{...LBL,color:K.acc}}>💡 다음 영상 제안</span>
+              {chResult.recommendations.map((r,i)=><div key={i} style={{fontSize:13,color:K.t2,padding:"6px 0"}}>• {r}</div>)}
+            </div>}
+          </div>}
         </div>}
       </main>
     </div>
@@ -680,8 +903,11 @@ function App(){
       {KeyModal}
       <input ref={fRef} type="file" accept="video/*" onChange={onFile} style={{display:"none"}}/>
       <header style={{backgroundColor:K.s1,padding:"12px 18px",display:"flex",alignItems:"center",justifyContent:"space-between",boxShadow:SHADOW}}>
-        <button onClick={()=>{setScreen("home");setHomeTab("editor");}} title="홈으로" data-hoverlift style={bx("transparent","inherit",{display:"flex",alignItems:"center",gap:8,padding:0,borderRadius:9})}><LogoMark sz={26}/><span style={{fontSize:16,fontWeight:800}}><span style={{color:K.t1}}>Edit</span><span style={{background:K.grad,WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent"}}>Us</span></span></button>
-        <button onClick={()=>setShowKey(true)} style={bx(K.s3,apiKey?K.grn:K.t2,{padding:"7px 12px",fontSize:11,fontWeight:700,borderRadius:9})}>{apiKey?"🔑 ON":"🔑"}</button>
+        <button onClick={()=>{setScreen("home");setHomeTab("editor");}} title={t("home")} data-hoverlift style={bx("transparent","inherit",{display:"flex",alignItems:"center",gap:8,padding:0,borderRadius:9})}><LogoMark sz={26}/><span style={{fontSize:16,fontWeight:800}}><span style={{color:K.t1}}>Edit</span><span style={{background:K.grad,WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent"}}>Us</span></span></button>
+        <div style={{display:"flex",gap:7,alignItems:"center"}}>
+          <ThemeToggle/>
+          <button onClick={()=>setShowKey(true)} style={bx(K.s3,apiKey?K.grn:K.t2,{padding:"7px 12px",fontSize:11,fontWeight:700,borderRadius:9})}>{apiKey?"🔑 ON":"🔑"}</button>
+        </div>
       </header>
       <main style={{flex:1,overflowY:"auto",padding:16,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",textAlign:"center",gap:14}}>
         <LogoMark sz={48}/>
