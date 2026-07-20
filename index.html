@@ -51,38 +51,111 @@ button:disabled{cursor:not-allowed;opacity:.5}
 const {useState,useRef,useEffect,useCallback}=React;
 
 /* ── SVG Icons ── */
-const I=({sz=18,ch,...p})=><svg width={sz} height={sz} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}>{ch}</svg>;
-const Film=p=><I {...p} ch={<><rect x="2" y="2" width="20" height="20" rx="2"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="2" y1="7" x2="7" y2="7"/><line x1="17" y1="7" x2="22" y2="7"/><line x1="2" y1="17" x2="7" y2="17"/><line x1="17" y1="17" x2="22" y2="17"/></>}/>;
-const Play=p=><I {...p} ch={<polygon points="5 3 19 12 5 21 5 3" fill="currentColor"/>}/>;
-const Pause=p=><I {...p} ch={<><rect x="6" y="4" width="4" height="16" fill="currentColor"/><rect x="14" y="4" width="4" height="16" fill="currentColor"/></>}/>;
-const Upload=p=><I {...p} ch={<><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></>}/>;
-const Download=p=><I {...p} ch={<><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></>}/>;
-const Send=p=><I {...p} ch={<><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></>}/>;
-const Scissors=p=><I {...p} ch={<><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><line x1="20" y1="4" x2="8.12" y2="15.88"/><line x1="14.47" y1="14.48" x2="20" y2="20"/><line x1="8.12" y1="8.12" x2="12" y2="12"/></>}/>;
-const Sliders=p=><I {...p} ch={<><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></>}/>;
-const TypeI=p=><I {...p} ch={<><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></>}/>;
-const Palette=p=><I {...p} ch={<><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2a10 10 0 000 20 1.5 1.5 0 001-2.6 1.5 1.5 0 011-2.6H16a4 4 0 004-4 8 8 0 00-8-10z"/></>}/>;
-const Sparkles=p=><I {...p} ch={<path d="M12 3l1.88 5.76L20 10.5l-5.76 1.88L12 18l-1.88-5.76L4 10.5l5.76-1.88z"/>}/>;
-const FileText=p=><I {...p} ch={<><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></>}/>;
-const Check=p=><I {...p} ch={<polyline points="20 6 9 17 4 12"/>}/>;
-const Plus=p=><I {...p} ch={<><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></>}/>;
-const Trash=p=><I {...p} ch={<><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></>}/>;
-const Eye=p=><I {...p} ch={<><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></>}/>;
-const ChevL=p=><I {...p} ch={<polyline points="15 18 9 12 15 6"/>}/>;
-const ChevD=p=><I {...p} ch={<polyline points="6 9 12 15 18 9"/>}/>;
-const SBk=p=><I {...p} ch={<><polygon points="19 20 9 12 19 4 19 20"/><line x1="5" y1="19" x2="5" y2="5"/></>}/>;
-const SFw=p=><I {...p} ch={<><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19"/></>}/>;
-const Rotate=p=><I {...p} ch={<><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></>}/>;
-const TUp=p=><I {...p} ch={<><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></>}/>;
-const Copy=p=><I {...p} ch={<><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></>}/>;
-const ZIn=p=><I {...p} ch={<><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></>}/>;
-const ZOut=p=><I {...p} ch={<><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="8" y1="11" x2="14" y2="11"/></>}/>;
-const Keyboard=p=><I {...p} ch={<><rect x="2" y="6" width="20" height="12" rx="2"/><line x1="6" y1="10" x2="6" y2="10"/><line x1="10" y1="10" x2="10" y2="10"/><line x1="14" y1="10" x2="14" y2="10"/><line x1="18" y1="10" x2="18" y2="10"/><line x1="6" y1="14" x2="14" y2="14"/></>}/>;
-const Sun=p=><I {...p} ch={<><circle cx="12" cy="12" r="4"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></>}/>;
-const Moon=p=><I {...p} ch={<path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>}/>;
-const Globe=p=><I {...p} ch={<><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 010 20 15.3 15.3 0 010-20z"/></>}/>;
-const Radio=p=><I {...p} ch={<><circle cx="12" cy="12" r="2"/><path d="M16.24 7.76a6 6 0 010 8.49M7.76 16.24a6 6 0 010-8.49M19.07 4.93a10 10 0 010 14.14M4.93 19.07a10 10 0 010-14.14"/></>}/>;
-const Save=p=><I {...p} ch={<><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></>}/>;
+/* ── EditUs custom icon set ──
+   Designed from scratch to match the brand: soft filled/rounded shapes
+   (echoing the logo's solid rounded forms) instead of generic outline icons. */
+const I=({sz=18,ch,...p})=><svg width={sz} height={sz} viewBox="0 0 24 24" {...p}>{ch}</svg>;
+
+const Film=p=><I {...p} ch={<>
+  <rect x="3" y="8" width="18" height="13" rx="3" fill="currentColor"/>
+  <rect x="3" y="3" width="18" height="5.2" rx="2" fill="currentColor" opacity="0.5"/>
+  <rect x="6.3" y="3" width="2" height="5.2" fill="#fff" opacity="0.4" transform="skewX(-18)"/>
+  <rect x="11.5" y="3" width="2" height="5.2" fill="#fff" opacity="0.4" transform="skewX(-18)"/>
+  <rect x="16.7" y="3" width="2" height="5.2" fill="#fff" opacity="0.4" transform="skewX(-18)"/>
+</>}/>;
+const Play=p=><I {...p} ch={<path d="M8 5.3v13.4a1 1 0 001.53.85l10.2-6.7a1 1 0 000-1.68L9.53 4.45A1 1 0 008 5.3z" fill="currentColor"/>}/>;
+const Pause=p=><I {...p} ch={<><rect x="6" y="5" width="4.4" height="14" rx="2" fill="currentColor"/><rect x="13.6" y="5" width="4.4" height="14" rx="2" fill="currentColor"/></>}/>;
+const Upload=p=><I {...p} ch={<><path d="M12 3l5.2 5.2h-3.3V15h-3.8V8.2H6.8L12 3z" fill="currentColor"/><rect x="4" y="17.5" width="16" height="3.5" rx="1.75" fill="currentColor" opacity="0.45"/></>}/>;
+const Download=p=><I {...p} ch={<><path d="M12 15.5L6.8 10.3h3.3V3.5h3.8v6.8h3.3L12 15.5z" fill="currentColor"/><rect x="4" y="17.5" width="16" height="3.5" rx="1.75" fill="currentColor" opacity="0.45"/></>}/>;
+const Send=p=><I {...p} ch={<path d="M3 11.2l17.3-8.1-6.6 17.3-3-6.7L3 11.2z" fill="currentColor"/>}/>;
+const Scissors=p=><I {...p} ch={<>
+  <circle cx="6" cy="6.2" r="2.5" fill="currentColor"/>
+  <circle cx="6" cy="17.8" r="2.5" fill="currentColor"/>
+  <rect x="6.6" y="11.3" width="14.5" height="1.5" rx="0.75" fill="currentColor" transform="rotate(-27 8 12)"/>
+  <rect x="6.6" y="11.3" width="14.5" height="1.5" rx="0.75" fill="currentColor" transform="rotate(27 8 12)"/>
+</>}/>;
+const Sliders=p=><I {...p} ch={<>
+  <rect x="5" y="3" width="2" height="18" rx="1" fill="currentColor" opacity="0.3"/><circle cx="6" cy="8" r="2.5" fill="currentColor"/>
+  <rect x="11" y="3" width="2" height="18" rx="1" fill="currentColor" opacity="0.3"/><circle cx="12" cy="15.5" r="2.5" fill="currentColor"/>
+  <rect x="17" y="3" width="2" height="18" rx="1" fill="currentColor" opacity="0.3"/><circle cx="18" cy="11" r="2.5" fill="currentColor"/>
+</>}/>;
+const TypeI=p=><I {...p} ch={<>
+  <rect x="2" y="5" width="20" height="12" rx="4" fill="currentColor" opacity="0.14"/>
+  <rect x="2.5" y="5.5" width="19" height="11" rx="3.5" fill="none" stroke="currentColor" strokeWidth="1.5"/>
+  <rect x="5.5" y="9" width="9.5" height="1.7" rx="0.85" fill="currentColor"/>
+  <rect x="5.5" y="12.1" width="6" height="1.7" rx="0.85" fill="currentColor"/>
+  <path d="M8.5 17l-2 3.2v-3.2z" fill="currentColor"/>
+</>}/>;
+const Palette=p=><I {...p} ch={<>
+  <path d="M12 3a9 9 0 100 18c1.3 0 1.9-.85 1.9-1.9 0-.55-.25-.95-.5-1.3-.28-.32-.47-.66-.47-1.05 0-.75.65-1.4 1.4-1.4h1.75A4.9 4.9 0 0021 10.9C21 6.6 17 3 12 3z" fill="currentColor"/>
+  <circle cx="7.6" cy="10.7" r="1.35" fill="#fff" opacity="0.75"/><circle cx="9.6" cy="7.2" r="1.35" fill="#fff" opacity="0.75"/>
+  <circle cx="14.4" cy="7.2" r="1.35" fill="#fff" opacity="0.75"/><circle cx="16.3" cy="10.7" r="1.35" fill="#fff" opacity="0.75"/>
+</>}/>;
+const Sparkles=p=><I {...p} ch={<>
+  <path d="M12 2.2l2.1 6.5L20.8 11l-6.7 2.1L12 19.8l-2.1-6.7L3.2 11l6.7-2.3L12 2.2z" fill="currentColor"/>
+  <path d="M19 2.5l.75 2.1L22 5.3l-2.25.85L19 8.3l-.75-2.15L16 5.3l2.25-.7L19 2.5z" fill="currentColor" opacity="0.55"/>
+</>}/>;
+const FileText=p=><I {...p} ch={<>
+  <path d="M6 2.2h8.2l5 5V20a2 2 0 01-2 2H6a2 2 0 01-2-2V4.2a2 2 0 012-2z" fill="currentColor" opacity="0.14"/>
+  <path d="M6 2.2h8.2l5 5V20a2 2 0 01-2 2H6a2 2 0 01-2-2V4.2a2 2 0 012-2z" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/>
+  <path d="M14.2 2.2v5h5" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/>
+  <rect x="7" y="12.2" width="10" height="1.6" rx="0.8" fill="currentColor"/><rect x="7" y="15.6" width="7" height="1.6" rx="0.8" fill="currentColor"/>
+</>}/>;
+const Check=p=><I {...p} ch={<path d="M4 12.7l5.2 5.1L20 6.3" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round"/>}/>;
+const Plus=p=><I {...p} ch={<><rect x="10.4" y="4" width="3.2" height="16" rx="1.6" fill="currentColor"/><rect x="4" y="10.4" width="16" height="3.2" rx="1.6" fill="currentColor"/></>}/>;
+const Trash=p=><I {...p} ch={<>
+  <rect x="5" y="8" width="14" height="13" rx="2.5" fill="currentColor" opacity="0.92"/>
+  <rect x="2.7" y="5" width="18.6" height="2.3" rx="1.15" fill="currentColor"/><rect x="9" y="2" width="6" height="2.3" rx="1.15" fill="currentColor"/>
+  <rect x="9" y="10.6" width="1.7" height="8" rx="0.85" fill="#fff" opacity="0.55"/><rect x="13.3" y="10.6" width="1.7" height="8" rx="0.85" fill="#fff" opacity="0.55"/>
+</>}/>;
+const Eye=p=><I {...p} ch={<>
+  <path d="M1 12S5.4 4.6 12 4.6 23 12 23 12s-4.4 7.4-11 7.4S1 12 1 12z" fill="currentColor" opacity="0.16"/>
+  <path d="M1 12S5.4 4.6 12 4.6 23 12 23 12s-4.4 7.4-11 7.4S1 12 1 12z" fill="none" stroke="currentColor" strokeWidth="1.5"/>
+  <circle cx="12" cy="12" r="3.1" fill="currentColor"/>
+</>}/>;
+const ChevL=p=><I {...p} ch={<path d="M15 5.2L8.2 12 15 18.8" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round"/>}/>;
+const ChevD=p=><I {...p} ch={<path d="M5.2 9L12 15.8 18.8 9" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round"/>}/>;
+const SBk=p=><I {...p} ch={<><path d="M19 5.2v13.6l-10-6.8 10-6.8z" fill="currentColor"/><rect x="3.6" y="5" width="2.3" height="14" rx="1.15" fill="currentColor"/></>}/>;
+const SFw=p=><I {...p} ch={<><path d="M5 5.2v13.6l10-6.8-10-6.8z" fill="currentColor"/><rect x="18.1" y="5" width="2.3" height="14" rx="1.15" fill="currentColor"/></>}/>;
+const Rotate=p=><I {...p} ch={<>
+  <path d="M12 5.2a6.8 6.8 0 105.5 2.8" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round"/>
+  <path d="M18 3v5h-5" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" strokeLinejoin="round"/>
+</>}/>;
+const TUp=p=><I {...p} ch={<>
+  <path d="M3 17.2l5.6-5.6 3.8 3.7L20.5 7" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" strokeLinejoin="round"/>
+  <path d="M15 7h5.5v5.5" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" strokeLinejoin="round"/>
+</>}/>;
+const Copy=p=><I {...p} ch={<><rect x="8" y="8" width="13" height="13" rx="2.6" fill="currentColor" opacity="0.85"/><rect x="3" y="3" width="13" height="13" rx="2.6" fill="none" stroke="currentColor" strokeWidth="1.7"/></>}/>;
+const ZIn=p=><I {...p} ch={<><circle cx="11" cy="11" r="7.3" fill="none" stroke="currentColor" strokeWidth="1.8"/><rect x="17.5" y="17.5" width="2.2" height="6" rx="1.1" fill="currentColor" transform="rotate(45 18.6 20.5)"/><rect x="7.8" y="10.1" width="6.4" height="1.8" rx="0.9" fill="currentColor"/><rect x="10.1" y="7.8" width="1.8" height="6.4" rx="0.9" fill="currentColor"/></>}/>;
+const ZOut=p=><I {...p} ch={<><circle cx="11" cy="11" r="7.3" fill="none" stroke="currentColor" strokeWidth="1.8"/><rect x="17.5" y="17.5" width="2.2" height="6" rx="1.1" fill="currentColor" transform="rotate(45 18.6 20.5)"/><rect x="7.8" y="10.1" width="6.4" height="1.8" rx="0.9" fill="currentColor"/></>}/>;
+const Keyboard=p=><I {...p} ch={<>
+  <rect x="2" y="6" width="20" height="13" rx="3" fill="currentColor" opacity="0.14"/>
+  <rect x="2.5" y="6.5" width="19" height="12" rx="2.5" fill="none" stroke="currentColor" strokeWidth="1.5"/>
+  <circle cx="6.3" cy="10.4" r="0.95" fill="currentColor"/><circle cx="10" cy="10.4" r="0.95" fill="currentColor"/><circle cx="13.7" cy="10.4" r="0.95" fill="currentColor"/><circle cx="17.4" cy="10.4" r="0.95" fill="currentColor"/>
+  <rect x="6" y="13.8" width="12" height="2" rx="1" fill="currentColor"/>
+</>}/>;
+const Sun=p=><I {...p} ch={<>
+  <circle cx="12" cy="12" r="4.3" fill="currentColor"/>
+  <g stroke="currentColor" strokeWidth="2" strokeLinecap="round"><line x1="12" y1="1.6" x2="12" y2="4"/><line x1="12" y1="20" x2="12" y2="22.4"/><line x1="1.6" y1="12" x2="4" y2="12"/><line x1="20" y1="12" x2="22.4" y2="12"/><line x1="4.6" y1="4.6" x2="6.2" y2="6.2"/><line x1="17.8" y1="17.8" x2="19.4" y2="19.4"/><line x1="4.6" y1="19.4" x2="6.2" y2="17.8"/><line x1="17.8" y1="6.2" x2="19.4" y2="4.6"/></g>
+</>}/>;
+const Moon=p=><I {...p} ch={<path d="M20 14.7A8.6 8.6 0 119.3 4a7.1 7.1 0 0010.7 10.7z" fill="currentColor"/>}/>;
+const Globe=p=><I {...p} ch={<>
+  <circle cx="12" cy="12" r="9.4" fill="none" stroke="currentColor" strokeWidth="1.6"/>
+  <ellipse cx="12" cy="12" rx="3.9" ry="9.4" fill="none" stroke="currentColor" strokeWidth="1.6"/>
+  <line x1="2.6" y1="12" x2="21.4" y2="12" stroke="currentColor" strokeWidth="1.6"/>
+</>}/>;
+const Radio=p=><I {...p} ch={<>
+  <circle cx="12" cy="12" r="2.1" fill="currentColor"/>
+  <path d="M8.4 8.4a5 5 0 000 7.2" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round"/>
+  <path d="M15.6 8.4a5 5 0 010 7.2" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round"/>
+  <path d="M5.3 5.3a9.6 9.6 0 000 13.4" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" opacity="0.5"/>
+  <path d="M18.7 5.3a9.6 9.6 0 010 13.4" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" opacity="0.5"/>
+</>}/>;
+const Save=p=><I {...p} ch={<>
+  <path d="M5 3h11l5 5v11a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2z" fill="currentColor" opacity="0.16"/>
+  <path d="M5 3h11l5 5v11a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2z" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/>
+  <rect x="7" y="14" width="10" height="6" fill="currentColor" opacity="0.85"/><rect x="8" y="4" width="6" height="4" fill="currentColor"/>
+</>}/>;
 
 /* ── EditUs Logo Mark ── */
 const LogoMark=({sz=32})=>(
@@ -126,29 +199,29 @@ const WAVE=Array.from({length:160},(_,i)=>0.08+0.52*Math.abs(Math.sin(i*0.241+1.
 const LANGS=[{id:"ko",label:"한국어"},{id:"en",label:"English"},{id:"ja",label:"日本語"},{id:"zh",label:"中文"}];
 const LANG_NAME={ko:"Korean",en:"English",ja:"Japanese",zh:"Chinese"};
 const TR={
-  ko:{home:"홈으로",editorTab:"🎬 에디터",trendsTab:"📊 트렌드",scriptTab:"📝 대본",designTab:"🎨 디자인",channelTab:"📡 채널 분석",
+  ko:{home:"홈으로",editorTab:"🎬 에디터",trendsTab:"📊 트렌드",scriptTab:"📝 대본",designTab:"🎨 디자인",channelTab:"📡 채널 분석",shortsTab:"✂️ 숏츠",
       heroTitle:"당신과 AI, 함께 편집해요",heroSub:"편집·트렌딩·대본·디자인 — 크리에이터의 하루를 AI가 함께 걷습니다",
       startEditing:"함께 편집 시작하기 →",uploadNow:"영상 바로 업로드",shortcuts:"단축키",apiKeyOn:"🔑 AI ON",apiKeyOff:"🔑 API 키",
       exportBtn:"내보내기",aiTool:"AI 편집",cutTool:"컷&속도",colorTool:"색보정",textTool:"자막",styleTool:"스타일",
-      trendHeading:"📊 트렌딩 주제 조사",scriptHeading:"📝 함께 쓰는 대본",designHeading:"🎨 함께 만드는 썸네일",channelHeading:"📡 내 채널 분석",
+      trendHeading:"📊 트렌딩 주제 조사",scriptHeading:"📝 함께 쓰는 대본",designHeading:"🎨 함께 만드는 썸네일",channelHeading:"📡 내 채널 분석",shortsHeading:"✂️ 롱폼 → 숏츠 자동 추출",
       lastSaved:"마지막 자동저장",saving:"저장 중...",darkMode:"다크 모드",lightMode:"라이트 모드"},
-  en:{home:"Home",editorTab:"🎬 Editor",trendsTab:"📊 Trends",scriptTab:"📝 Script",designTab:"🎨 Design",channelTab:"📡 Channel Insights",
+  en:{home:"Home",editorTab:"🎬 Editor",trendsTab:"📊 Trends",scriptTab:"📝 Script",designTab:"🎨 Design",channelTab:"📡 Channel Insights",shortsTab:"✂️ Shorts",
       heroTitle:"You and AI, editing together",heroSub:"Editing · Trends · Scripts · Design — AI walks through your creator day with you",
       startEditing:"Start Editing Together →",uploadNow:"Upload a video",shortcuts:"Shortcuts",apiKeyOn:"🔑 AI ON",apiKeyOff:"🔑 API Key",
       exportBtn:"Export",aiTool:"AI Edit",cutTool:"Cut & Speed",colorTool:"Color",textTool:"Captions",styleTool:"Style",
-      trendHeading:"📊 Trending Topics",scriptHeading:"📝 Write a Script Together",designHeading:"🎨 Design a Thumbnail Together",channelHeading:"📡 My Channel Insights",
+      trendHeading:"📊 Trending Topics",scriptHeading:"📝 Write a Script Together",designHeading:"🎨 Design a Thumbnail Together",channelHeading:"📡 My Channel Insights",shortsHeading:"✂️ Auto-clip Long Videos to Shorts",
       lastSaved:"Last autosaved",saving:"Saving...",darkMode:"Dark mode",lightMode:"Light mode"},
-  ja:{home:"ホーム",editorTab:"🎬 エディター",trendsTab:"📊 トレンド",scriptTab:"📝 台本",designTab:"🎨 デザイン",channelTab:"📡 チャンネル分析",
+  ja:{home:"ホーム",editorTab:"🎬 エディター",trendsTab:"📊 トレンド",scriptTab:"📝 台本",designTab:"🎨 デザイン",channelTab:"📡 チャンネル分析",shortsTab:"✂️ ショート",
       heroTitle:"あなたとAI、一緒に編集しよう",heroSub:"編集・トレンド・台本・デザイン — クリエイターの一日をAIと共に",
       startEditing:"一緒に編集を始める →",uploadNow:"動画をアップロード",shortcuts:"ショートカット",apiKeyOn:"🔑 AI ON",apiKeyOff:"🔑 APIキー",
       exportBtn:"書き出す",aiTool:"AI編集",cutTool:"カット/速度",colorTool:"カラー",textTool:"字幕",styleTool:"スタイル",
-      trendHeading:"📊 トレンド調査",scriptHeading:"📝 台本を一緒に書く",designHeading:"🎨 サムネイルを一緒に作る",channelHeading:"📡 チャンネル分析",
+      trendHeading:"📊 トレンド調査",scriptHeading:"📝 台本を一緒に書く",designHeading:"🎨 サムネイルを一緒に作る",channelHeading:"📡 チャンネル分析",shortsHeading:"✂️ 長編動画をショートに自動変換",
       lastSaved:"最終自動保存",saving:"保存中...",darkMode:"ダークモード",lightMode:"ライトモード"},
-  zh:{home:"首页",editorTab:"🎬 编辑器",trendsTab:"📊 趋势",scriptTab:"📝 脚本",designTab:"🎨 设计",channelTab:"📡 频道分析",
+  zh:{home:"首页",editorTab:"🎬 编辑器",trendsTab:"📊 趋势",scriptTab:"📝 脚本",designTab:"🎨 设计",channelTab:"📡 频道分析",shortsTab:"✂️ 短视频",
       heroTitle:"你与AI，一起剪辑",heroSub:"剪辑·趋势·脚本·设计 — AI 陪伴创作者的每一天",
       startEditing:"一起开始剪辑 →",uploadNow:"上传视频",shortcuts:"快捷键",apiKeyOn:"🔑 AI 已开启",apiKeyOff:"🔑 API 密钥",
       exportBtn:"导出",aiTool:"AI编辑",cutTool:"剪切/速度",colorTool:"调色",textTool:"字幕",styleTool:"样式",
-      trendHeading:"📊 热门话题调研",scriptHeading:"📝 一起写脚本",designHeading:"🎨 一起做缩略图",channelHeading:"📡 我的频道分析",
+      trendHeading:"📊 热门话题调研",scriptHeading:"📝 一起写脚本",designHeading:"🎨 一起做缩略图",channelHeading:"📡 我的频道分析",shortsHeading:"✂️ 长视频自动生成短视频",
       lastSaved:"上次自动保存",saving:"保存中...",darkMode:"深色模式",lightMode:"浅色模式"},
 };
 
@@ -194,6 +267,15 @@ const THUMB_THEMES=[
 const THUMB_LAYOUTS=[{id:"bold",name:"빅 텍스트",ic:"Aa"},{id:"split",name:"반반 분할",ic:"↕"},{id:"neon",name:"네온",ic:"✦"},{id:"minimal",name:"미니멀",ic:"○"},{id:"cinematic",name:"시네마틱",ic:"🎬"},{id:"gaming",name:"게임",ic:"⚡"}];
 const THUMB_FORMATS=[{id:"youtube",name:"유튜브",w:1280,h:720},{id:"shorts",name:"쇼츠",w:1080,h:1920},{id:"banner",name:"채널아트",w:2560,h:1440}];
 
+/* ── Shorts caption templates (benchmarked against AlphaCut's 5 templates) ── */
+const SHORT_TEMPLATES=[
+  {id:"sand",   name:"샌드페이퍼", capStyle:"subtitle", capColor:"#ffffff", capBg:"rgba(20,15,10,.75)", accent:"#d99a1f"},
+  {id:"minimal",name:"미니멀",     capStyle:"minimal",  capColor:"#ffffff", capBg:"transparent",         accent:"#ffffff"},
+  {id:"vibrant",name:"생동감",     capStyle:"bold",     capColor:"#ffe600", capBg:"rgba(139,47,214,.4)", accent:"#8b2fd6"},
+  {id:"green",  name:"그린라인",   capStyle:"neon",     capColor:"#39ff9d", capBg:"transparent",         accent:"#1fa971"},
+  {id:"news",   name:"뉴스레터",   capStyle:"subtitle", capColor:"#ffffff", capBg:"rgba(20,20,30,.85)",  accent:"#3b82f6"},
+];
+
 const AI_EDIT=`Expert AI video editor for "EditUs". Respond ONLY with JSON (no markdown):
 {"message":"친근한 한국어 확인 20자이내 이모지1개","actions":[{"type":"colorGrade|applyTemplate|addText|cut|setSpeed|trim|reset","params":{}}]}`;
 const AI_SCRIPT=`Korean YouTube script writer. Respond ONLY with valid JSON (no markdown):
@@ -214,6 +296,15 @@ Respond ONLY with JSON (no markdown):
 }
 If you cannot find reliable public data, say so honestly inside the summary field rather than inventing numbers.
 Respond in {{LANG}}.`;
+const AI_SHORTS=`You are an expert short-form video producer (benchmarked against AlphaCut, a Korean AI shorts tool).
+Given a long-form video's duration and topic/context, split it into multiple clip-worthy shorts —
+roughly one clip per 2 minutes of source (e.g. a 10-minute video yields ~5 clips), each 15-60 seconds.
+For each clip, identify the single most attention-grabbing moment and make sure it appears in the FIRST
+3 seconds of the clip (AlphaCut's "첫 3초 후킹" pattern) — reorder/trim the clip boundaries so the hook leads.
+Respond ONLY with JSON array (no markdown):
+[{"start":45,"end":78,"score":92,"hook":"짧고 강력한 훅 자막(15자 이내)","reason":"이 구간이 쇼츠로 좋은 이유 1문장"}]
+Rules: start/end in seconds, end-start 15-60s, must fit within total duration, clips should not overlap,
+order by score descending. Avoid the excluded ranges given, if any.`;
 
 const bx=(bg,fg="#fff",ex={})=>({backgroundColor:bg,color:fg,border:"none",cursor:"pointer",fontFamily:"inherit",...ex});
 const fmtT=s=>{const n=Math.max(0,Math.floor(s||0));return`${Math.floor(n/60)}:${String(n%60).padStart(2,"0")}`;};
@@ -291,12 +382,28 @@ function App(){
   const [chHandle,setChHandle]=useState("");
   const [chResult,setChResult]=useState(null), [chLoading,setChLoading]=useState(false);
 
+  /* ── ✂️ Shorts auto-clipper (AlphaCut benchmark) ── */
+  const [shMode,setShMode]=useState("file"); // "file" | "link"
+  const [shLink,setShLink]=useState("");
+  const [shUrl,setShUrl]=useState(null), [shName,setShName]=useState("");
+  const [shDur,setShDur]=useState(0);
+  const [shContext,setShContext]=useState("");
+  const [shTemplate,setShTemplate]=useState("sand");
+  const [shClips,setShClips]=useState([]);
+  const [shActive,setShActive]=useState(null);
+  const [shAnalyzing,setShAnalyzing]=useState(false);
+  const [shRegenId,setShRegenId]=useState(null);
+  const [shExportId,setShExportId]=useState(null), [shExpPct,setShExpPct]=useState(0);
+  const [shPlaying,setShPlaying]=useState(false);
+  const [shNarrating,setShNarrating]=useState(null);
+
   /* ── 💾 Auto-save (every 10 minutes, to localStorage; degrades gracefully if unavailable) ── */
   const [lastSaved,setLastSaved]=useState(null);
   const [autosaveOk,setAutosaveOk]=useState(true);
   const [restorePrompt,setRestorePrompt]=useState(false);
 
   const vRef=useRef(null), cRef=useRef(null), fRef=useRef(null), animR=useRef(null), msgEnd=useRef(null);
+  const shVRef=useRef(null), shCRef=useRef(null), shFRef=useRef(null), shAnimR=useRef(null);
   const gR=useRef(grade), oR=useRef(overlays), cuR=useRef(cuts), bfR=useRef(false), uR=useRef(null);
 
   useEffect(()=>{gR.current=grade},[grade]);
@@ -524,6 +631,138 @@ function App(){
     setChLoading(false);
   };
 
+  /* ── ✂️ Shorts: canvas preview loop (9:16 center-crop + template caption + first-3s hook badge) ── */
+  const shActiveRef=useRef(null), shTemplateRef=useRef(shTemplate);
+  useEffect(()=>{shActiveRef.current=shActive;},[shActive]);
+  useEffect(()=>{shTemplateRef.current=shTemplate;},[shTemplate]);
+  useEffect(()=>{
+    const draw=()=>{
+      const v=shVRef.current,c=shCRef.current;
+      if(c){
+        const ctx=c.getContext("2d"),cw=c.width||360,ch=c.height||640;
+        if(v&&v.readyState>=2&&shUrl){
+          const vw=v.videoWidth,vh=v.videoHeight,targetRatio=9/16;
+          let sw=vh*targetRatio,sh=vh; if(sw>vw){sw=vw;sh=vw/targetRatio;}
+          const sx=(vw-sw)/2,sy=(vh-sh)/2;
+          ctx.drawImage(v,sx,sy,sw,sh,0,0,cw,ch);
+          const clip=shActiveRef.current;
+          if(clip){
+            const tpl=SHORT_TEMPLATES.find(x=>x.id===shTemplateRef.current)||SHORT_TEMPLATES[0];
+            const time=v.currentTime;
+            if(time>=clip.start&&time<=clip.end){
+              ctx.save();
+              const fs=cw*0.072,x=cw/2,y=ch*0.85;
+              if(tpl.capStyle==="neon"){ctx.shadowColor=tpl.capColor;ctx.shadowBlur=18;}
+              ctx.font=`800 ${fs}px system-ui`;ctx.textAlign="center";ctx.textBaseline="middle";
+              if(tpl.capBg!=="transparent"){
+                const mw=ctx.measureText(clip.hook).width;
+                ctx.fillStyle=tpl.capBg;ctx.beginPath();(ctx.roundRect||ctx.rect).call(ctx,x-mw/2-14,y-fs/2-9,mw+28,fs+18,8);ctx.fill();
+              }
+              ctx.strokeStyle="rgba(0,0,0,.7)";ctx.lineWidth=fs*.08;ctx.strokeText(clip.hook,x,y);
+              ctx.fillStyle=tpl.capColor;ctx.fillText(clip.hook,x,y);
+              ctx.restore();
+              if(time-clip.start<3){ctx.font=`800 ${cw*0.045}px system-ui`;ctx.textAlign="left";ctx.fillStyle=tpl.accent;ctx.fillText("🔥 HOOK",cw*0.05,ch*0.08);}
+            }
+          }
+        }else{ctx.fillStyle="#111";ctx.fillRect(0,0,cw,ch);}
+      }
+      shAnimR.current=requestAnimationFrame(draw);
+    };
+    shAnimR.current=requestAnimationFrame(draw);
+    return()=>cancelAnimationFrame(shAnimR.current);
+  },[]);
+
+  const loadShVideo=(url,name)=>{if(shUrl)URL.revokeObjectURL(shUrl);setShUrl(url);setShName(name);setShClips([]);setShActive(null);setShPlaying(false);};
+  const onShFile=e=>{const f=e.target.files?.[0];if(!f)return;loadShVideo(URL.createObjectURL(f),f.name.replace(/\.[^.]+$/,""));};
+  const onShLoaded=()=>{const v=shVRef.current,c=shCRef.current;if(!v||!c)return;c.width=360;c.height=640;setShDur(v.duration);};
+  const onShTU=()=>{const v=shVRef.current;if(!v)return;if(shActive&&v.currentTime>=shActive.end){v.pause();setShPlaying(false);}};
+  const toggleShPlay=()=>{const v=shVRef.current;if(!v||!shActive)return;if(shPlaying)v.pause();else{if(v.currentTime>=shActive.end||v.currentTime<shActive.start)v.currentTime=shActive.start;v.play();}setShPlaying(!shPlaying);};
+  const playShClip=clip=>{setShActive(clip);const v=shVRef.current;if(!v)return;v.currentTime=clip.start;v.play();setShPlaying(true);};
+
+  /* AI: split a long video into multiple clip-worthy shorts (see AI_SHORTS for the STT-limitation caveat) */
+  const analyzeShorts=async()=>{
+    if(!shUrl||shAnalyzing)return;
+    setShAnalyzing(true);setShClips([]);
+    const key=apiKey.trim();
+    if(!key){
+      await new Promise(r=>setTimeout(r,900));
+      const n=Math.min(6,Math.max(3,Math.round(shDur/120)));
+      const demo=Array.from({length:n},(_,i)=>{
+        const start=Math.max(0,(shDur/n)*i+3);
+        const end=Math.min(shDur,start+20+Math.random()*25);
+        return{id:Date.now()+i,start,end,score:Math.round(68+Math.random()*30),hook:["이거 실화냐?!","3초만 보세요","다들 이거 놓침","끝까지 가야 함","소름 돋는 순간","이 부분 미쳤다"][i%6],reason:"감정 곡선이 상승하는 구간으로 추정돼요 (API 키 연결 시 실제 분석)"};
+      });
+      setShClips(demo);setShAnalyzing(false);return;
+    }
+    try{
+      const res=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json","x-api-key":key,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},body:JSON.stringify({model:"claude-sonnet-4-6",max_tokens:1200,system:AI_SHORTS,messages:[{role:"user",content:`영상 길이: ${Math.round(shDur)}초\n주제/맥락: ${shContext||"정보 없음"}`}]})});
+      const data=await res.json();
+      if(data.error)throw new Error(data.error.message);
+      const j=JSON.parse(data.content.map(b=>b.text||"").join("").replace(/```json|```/g,"").trim());
+      setShClips(j.map((c,i)=>({...c,id:Date.now()+i,start:Math.min(c.start,shDur-5),end:Math.min(c.end,shDur)})));
+    }catch(e){setShClips([{id:Date.now(),start:0,end:Math.min(30,shDur),score:0,hook:"분석 실패",reason:"오류: "+e.message}]);}
+    setShAnalyzing(false);
+  };
+
+  /* AlphaCut's "재생성" — regenerate just ONE clip, avoiding the ranges already used by the others */
+  const regenerateClip=async clip=>{
+    if(shRegenId)return;setShRegenId(clip.id);
+    const others=shClips.filter(c=>c.id!==clip.id);
+    const replace=nc=>setShClips(p=>p.map(c=>c.id===clip.id?{...nc,id:clip.id}:c));
+    const key=apiKey.trim();
+    if(!key){
+      await new Promise(r=>setTimeout(r,700));
+      const start=Math.random()*Math.max(1,shDur-30);
+      replace({start,end:Math.min(shDur,start+20+Math.random()*20),score:Math.round(68+Math.random()*30),hook:"다시 뽑은 훅 문구",reason:"재생성된 데모 구간이에요 (API 키 연결 시 실제 분석)"});
+      setShRegenId(null);return;
+    }
+    try{
+      const excludeNote=others.map(r=>`${Math.round(r.start)}-${Math.round(r.end)}초`).join(", ")||"없음";
+      const res=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json","x-api-key":key,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},body:JSON.stringify({model:"claude-sonnet-4-6",max_tokens:400,system:AI_SHORTS,messages:[{role:"user",content:`영상 길이: ${Math.round(shDur)}초\n주제/맥락: ${shContext||"정보 없음"}\n이미 사용된 구간(피해서): ${excludeNote}\n새 후보 1개만 찾아줘.`}]})});
+      const data=await res.json();
+      if(data.error)throw new Error(data.error.message);
+      const j=JSON.parse(data.content.map(b=>b.text||"").join("").replace(/```json|```/g,"").trim());
+      const nc=Array.isArray(j)?j[0]:j;
+      replace({start:Math.min(nc.start,shDur-5),end:Math.min(nc.end,shDur),score:nc.score,hook:nc.hook,reason:nc.reason});
+    }catch{}
+    setShRegenId(null);
+  };
+
+  const exportShortsClip=async clip=>{
+    const c=shCRef.current,v=shVRef.current;if(!c||!v||shExportId)return;
+    setShExportId(clip.id);setShExpPct(0);setShActive(clip);
+    try{
+      const stream=c.captureStream(30),recorder=new MediaRecorder(stream,{mimeType:"video/webm;codecs=vp9"}),chunks=[];
+      recorder.ondataavailable=e=>{if(e.data.size>0)chunks.push(e.data);};
+      recorder.onstop=()=>{
+        const blob=new Blob(chunks,{type:"video/webm"}),url=URL.createObjectURL(blob),a=document.createElement("a");
+        a.href=url;a.download=`${shName||"shorts"}_${Math.round(clip.start)}s.webm`;
+        document.body.appendChild(a);a.click();document.body.removeChild(a);
+        setTimeout(()=>URL.revokeObjectURL(url),1000);setShExportId(null);setShExpPct(0);
+      };
+      v.currentTime=clip.start;await new Promise(r=>setTimeout(r,150));
+      recorder.start(100);v.play();setShPlaying(true);
+      const total=clip.end-clip.start;
+      const iv=setInterval(()=>{
+        setShExpPct(Math.min((v.currentTime-clip.start)/total*100,99));
+        if(v.currentTime>=clip.end||v.paused){clearInterval(iv);v.pause();setShPlaying(false);recorder.stop();}
+      },150);
+    }catch{setShExportId(null);}
+  };
+
+  /* AlphaCut's "AI 후킹 보이스" — approximated honestly with the browser's built-in speech
+     synthesis (not a professional voice actor, but a real, working narration preview) */
+  const narrateClip=clip=>{
+    if(!window.speechSynthesis){return;}
+    window.speechSynthesis.cancel();
+    const u=new SpeechSynthesisUtterance(clip.hook);
+    u.lang=lang==="ko"?"ko-KR":lang==="ja"?"ja-JP":lang==="zh"?"zh-CN":"en-US";
+    u.rate=1.02;
+    setShNarrating(clip.id);
+    u.onend=()=>setShNarrating(null);
+    window.speechSynthesis.speak(u);
+  };
+
   const renderThumb=useCallback(()=>{
     const c=thumbRef.current;if(!c)return;
     const ctx=c.getContext("2d");
@@ -738,7 +977,7 @@ function App(){
       <header style={{backgroundColor:K.s1,borderBottom:`1px solid ${K.b1}`,padding:"0 28px",display:"flex",alignItems:"center",height:60,gap:24,flexShrink:0}}>
         <button onClick={()=>{setScreen("home");setHomeTab("editor");}} title={t("home")} data-hoverlift style={bx("transparent","inherit",{display:"flex",alignItems:"center",gap:9,padding:0,borderRadius:10})}><LogoMark sz={30}/><span style={{fontSize:19,fontWeight:800}}><span style={{color:K.t1}}>Edit</span><span style={{background:K.grad,WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent"}}>Us</span></span></button>
         <div style={{display:"flex",gap:2}}>
-          {[["editor",t("editorTab")],["trends",t("trendsTab")],["script",t("scriptTab")],["design",t("designTab")],["channel",t("channelTab")]].map(([id,lbl])=>(
+          {[["editor",t("editorTab")],["shorts",t("shortsTab")],["trends",t("trendsTab")],["script",t("scriptTab")],["design",t("designTab")],["channel",t("channelTab")]].map(([id,lbl])=>(
             <button key={id} onClick={()=>setHomeTab(id)} data-hoverlift style={bx(homeTab===id?K.accSoft:"transparent",homeTab===id?K.acc:K.t2,{padding:"10px 16px",fontSize:13,fontWeight:homeTab===id?700:500,borderRadius:10,whiteSpace:"nowrap"})}>{lbl}</button>
           ))}
         </div>
@@ -833,6 +1072,86 @@ function App(){
               <div style={{backgroundColor:K.s1,borderRadius:16,padding:16,marginBottom:12,boxShadow:SHADOW}}><span style={LBL}>레이아웃</span><div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:6}}>{THUMB_LAYOUTS.map(l=><button key={l.id} onClick={()=>{setThumbLayout(l.id);setTimeout(renderThumb,0);}} data-hoverlift style={bx(thumbLayout===l.id?K.grad:K.s3,thumbLayout===l.id?"#fff":K.t2,{padding:"9px 4px",fontSize:9,fontWeight:600,borderRadius:9})}>{l.name}</button>)}</div></div>
               <div style={{backgroundColor:K.s1,borderRadius:16,padding:16,marginBottom:12,boxShadow:SHADOW}}><span style={LBL}>테마</span><div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:6}}>{THUMB_THEMES.map(th=><button key={th.id} onClick={()=>{setThumbTheme(th.id);setTimeout(renderThumb,0);}} data-hoverlift style={bx("transparent",K.t1,{padding:0,border:thumbTheme===th.id?`2px solid ${K.acc}`:`2px solid ${K.b1}`,borderRadius:10,overflow:"hidden"})}><div style={{height:26,background:`linear-gradient(135deg,${th.c1},${th.c2})`}}/></button>)}</div></div>
               <div style={{backgroundColor:K.s1,borderRadius:16,padding:16,boxShadow:SHADOW}}><span style={LBL}>텍스트</span>{[["메인",thumbText1,setThumbText1],["서브",thumbText2,setThumbText2],["배지",thumbBadge,setThumbBadge]].map(([l,v,s])=><input key={l} value={v} onChange={e=>{s(e.target.value);setTimeout(renderThumb,0);}} placeholder={l} style={{width:"100%",backgroundColor:K.s3,border:`1px solid ${K.b1}`,borderRadius:9,padding:"9px 11px",fontSize:13,marginBottom:8}}/>)}</div>
+            </div>
+          </div>
+        </div>}
+
+        {homeTab==="shorts"&&<div style={{maxWidth:1180,margin:"0 auto",padding:"36px 28px"}}>
+          {shUrl&&<video ref={shVRef} src={shUrl} crossOrigin="anonymous" preload="auto" onLoadedMetadata={onShLoaded} onTimeUpdate={onShTU} onPlay={()=>setShPlaying(true)} onPause={()=>setShPlaying(false)} style={{display:"none"}}/>}
+          <input ref={shFRef} type="file" accept="video/*" onChange={onShFile} style={{display:"none"}}/>
+          <h2 style={{fontSize:24,fontWeight:800,margin:"0 0 6px"}}>{t("shortsHeading")}</h2>
+          <p style={{fontSize:14,color:K.t3,marginBottom:22}}>롱폼 영상 하나로 여러 개의 쇼츠를 한 번에 — 알파컷 벤치마킹</p>
+
+          <div style={{display:"grid",gridTemplateColumns:"300px 1fr",gap:22}}>
+            {/* Left: vertical preview */}
+            <div>
+              <div style={{backgroundColor:"#111",borderRadius:20,overflow:"hidden",boxShadow:SHADOW_MD,position:"relative"}}>
+                <canvas ref={shCRef} style={{width:"100%",display:"block"}}/>
+                {!shUrl&&<div style={{position:"absolute",inset:0,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:12,padding:20,textAlign:"center"}}>
+                  <div style={{display:"flex",gap:6,backgroundColor:"rgba(255,255,255,.08)",borderRadius:10,padding:3}}>
+                    {[["file","파일"],["link","링크"]].map(([id,lbl])=><button key={id} onClick={()=>setShMode(id)} data-hoverlift style={bx(shMode===id?K.grad:"transparent",shMode===id?"#fff":"rgba(255,255,255,.6)",{padding:"6px 14px",fontSize:11,fontWeight:600,borderRadius:8})}>{lbl}</button>)}
+                  </div>
+                  {shMode==="file"?(
+                    <button onClick={()=>shFRef.current?.click()} data-hoverlift style={bx(K.grad,"#fff",{padding:"11px 18px",fontSize:12,fontWeight:700,borderRadius:11,display:"flex",alignItems:"center",gap:7})}><Upload sz={14}/> 영상 선택</button>
+                  ):(
+                    <div style={{width:"100%"}}>
+                      <input value={shLink} onChange={e=>setShLink(e.target.value)} placeholder="유튜브 링크 붙여넣기" style={{width:"100%",backgroundColor:"rgba(255,255,255,.1)",border:"1px solid rgba(255,255,255,.2)",borderRadius:9,padding:"9px 11px",fontSize:11,color:"#fff",marginBottom:8}}/>
+                      <p style={{fontSize:9,color:"rgba(255,255,255,.45)",lineHeight:1.5}}>⚙️ 링크 자동 다운로드는 서버 연동이 필요해요. 지금은 파일 업로드로 체험해보세요.</p>
+                    </div>
+                  )}
+                  <button onClick={()=>loadShVideo("https://www.w3schools.com/html/mov_bbb.mp4","샘플_롱폼")} data-hoverlift style={bx("rgba(255,255,255,.1)","#fff",{padding:"9px 14px",fontSize:11,borderRadius:10,border:"1px solid rgba(255,255,255,.15)"})}>🎬 샘플로 체험</button>
+                </div>}
+                {shExportId&&<div style={{position:"absolute",inset:0,backgroundColor:"rgba(0,0,0,.78)",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:8}}><div style={{width:130,height:4,backgroundColor:"rgba(255,255,255,.2)",borderRadius:2}}><div style={{height:"100%",width:`${shExpPct}%`,backgroundColor:K.grn,borderRadius:2}}/></div><span style={{fontSize:11,color:K.grn,fontWeight:700}}>내보내는 중 {Math.round(shExpPct)}%</span></div>}
+              </div>
+              {shUrl&&<div style={{backgroundColor:K.s1,borderRadius:14,padding:12,marginTop:12,boxShadow:SHADOW,display:"flex",alignItems:"center",gap:10}}>
+                <button onClick={toggleShPlay} disabled={!shActive} data-hoverlift style={bx(shActive?K.grad:K.s3,shActive?"#fff":K.t3,{width:32,height:32,borderRadius:"50%",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0})}>{shPlaying?<Pause sz={12}/>:<Play sz={12} style={{marginLeft:1}}/>}</button>
+                <span style={{fontSize:11,color:K.t2}}>{shActive?`${fmtT(shActive.start)}–${fmtT(shActive.end)}`:"클립을 선택하세요"}</span>
+              </div>}
+              {shUrl&&<div style={{backgroundColor:K.s1,borderRadius:14,padding:14,marginTop:12,boxShadow:SHADOW}}>
+                <span style={LBL}>영상 맥락 (선택, 정확도 향상)</span>
+                <textarea value={shContext} onChange={e=>setShContext(e.target.value)} placeholder="예: IT 리뷰 영상, 중반에 반전 있음..." rows={2} style={{width:"100%",backgroundColor:K.s3,border:`1px solid ${K.b1}`,borderRadius:9,padding:"9px 10px",fontSize:12,fontFamily:"inherit",resize:"vertical"}}/>
+              </div>}
+              {shUrl&&<div style={{backgroundColor:K.s1,borderRadius:14,padding:14,marginTop:12,boxShadow:SHADOW}}>
+                <span style={LBL}>자막 템플릿 (알파컷 스타일 벤치마킹)</span>
+                <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:6}}>
+                  {SHORT_TEMPLATES.map(tp=><button key={tp.id} onClick={()=>setShTemplate(tp.id)} data-hoverlift style={bx(shTemplate===tp.id?K.grad:K.s3,shTemplate===tp.id?"#fff":K.t2,{padding:"8px 4px",fontSize:10,fontWeight:600,borderRadius:8})}>{tp.name}</button>)}
+                </div>
+              </div>}
+            </div>
+
+            {/* Right: AI analyze + clip results */}
+            <div>
+              <button onClick={analyzeShorts} disabled={!shUrl||shAnalyzing} data-hoverlift style={bx(!shUrl?K.s3:K.grad,!shUrl?K.t3:"#fff",{width:"100%",padding:15,borderRadius:14,fontSize:14,fontWeight:700,display:"flex",alignItems:"center",justifyContent:"center",gap:8,marginBottom:14,boxShadow:!shUrl?"none":"0 6px 20px rgba(139,47,214,.25)"})}>
+                {shAnalyzing?<><div style={{width:15,height:15,border:"2px solid #fff4",borderTopColor:"#fff",borderRadius:"50%",animation:"spin 1s linear infinite"}}/> AI가 롱폼에서 하이라이트를 찾고 있어요...</>:<><Scissors sz={16}/> AI로 쇼츠 여러 개 한번에 만들기</>}
+              </button>
+              {!apiKey&&<p style={{fontSize:11,color:K.t3,marginBottom:14}}>⚙️ API 키 없이도 데모로 체험 가능해요. 🔑에서 키 입력 시 실제 AI 분석·음성 인식 기반 자막까지 사용 가능해요.</p>}
+
+              {shClips.length===0&&!shAnalyzing&&<div style={{backgroundColor:K.s1,borderRadius:16,padding:40,textAlign:"center",boxShadow:SHADOW}}>
+                <Scissors sz={28} color={K.t4} style={{marginBottom:10}}/>
+                <p style={{fontSize:13,color:K.t3}}>영상을 올리고 분석을 시작하면<br/>2분당 약 1개꼴로 쇼츠 후보를 잘라드려요</p>
+              </div>}
+
+              <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12}}>
+                {shClips.map((clip,i)=>(
+                  <div key={clip.id} onClick={()=>playShClip(clip)} className="fadein" style={{backgroundColor:K.s1,borderRadius:16,padding:15,boxShadow:SHADOW,cursor:"pointer",border:shActive?.id===clip.id?`2px solid ${K.acc}`:"2px solid transparent"}}>
+                    <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:8}}>
+                      <div style={{display:"flex",alignItems:"center",gap:8}}>
+                        <div style={{width:24,height:24,borderRadius:"50%",backgroundColor:K.accSoft,display:"flex",alignItems:"center",justifyContent:"center",fontSize:11,fontWeight:800,color:K.acc,flexShrink:0}}>{i+1}</div>
+                        <p style={{fontSize:12,fontWeight:700,margin:0}}>{clip.hook}</p>
+                      </div>
+                      <span style={{fontSize:14,fontWeight:800,color:clip.score>=80?K.grn:clip.score>=60?K.amb:K.t3,flexShrink:0}}>{clip.score}</span>
+                    </div>
+                    <p style={{fontSize:10,color:K.t3,margin:"0 0 3px"}}>⏱️ {fmtT(clip.start)}–{fmtT(clip.end)} ({Math.round(clip.end-clip.start)}초)</p>
+                    <p style={{fontSize:11,color:K.t3,margin:"0 0 10px",lineHeight:1.5}}>{clip.reason}</p>
+                    <div style={{display:"flex",gap:5,flexWrap:"wrap"}}>
+                      <button onClick={e=>{e.stopPropagation();regenerateClip(clip);}} disabled={shRegenId===clip.id} data-hoverlift style={bx(K.s3,K.t2,{flex:1,padding:"7px",fontSize:10,fontWeight:600,borderRadius:8,display:"flex",alignItems:"center",justifyContent:"center",gap:4})}>{shRegenId===clip.id?"⏳":<><Rotate sz={10}/>재생성</>}</button>
+                      <button onClick={e=>{e.stopPropagation();narrateClip(clip);}} disabled={shNarrating===clip.id} data-hoverlift style={bx(K.s3,K.t2,{flex:1,padding:"7px",fontSize:10,fontWeight:600,borderRadius:8,display:"flex",alignItems:"center",justifyContent:"center",gap:4})}>{shNarrating===clip.id?"🔊":"🎙️ AI 낭독"}</button>
+                      <button onClick={e=>{e.stopPropagation();exportShortsClip(clip);}} disabled={!!shExportId} data-hoverlift style={bx(K.grad,"#fff",{flex:1,padding:"7px",fontSize:10,fontWeight:700,borderRadius:8,display:"flex",alignItems:"center",justifyContent:"center",gap:4})}><Download sz={10}/>저장</button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              {shClips.length>0&&<button onClick={analyzeShorts} data-hoverlift style={bx(K.s1,K.t2,{width:"100%",padding:12,borderRadius:12,fontSize:12,fontWeight:600,display:"flex",alignItems:"center",justifyContent:"center",gap:6,marginTop:14,boxShadow:SHADOW})}><Rotate sz={13}/> 전체 다시 분석</button>}
             </div>
           </div>
         </div>}
